@@ -1,0 +1,153 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Este script es para usar la unidad de switcheo Agilent34970A  %
+% a trav?s del puerto GPIB, para -por ejemplo- levantar las 5   %
+% lecturas de las termocuplas del experimento de difusividad    %
+% t?rmica. Dada la din?mica del experimento se puede aproximar  % 
+% la serie de 5 medidas como una medida simult?nea de las 5.    %
+% El programa le ordena al instrumento que haga un ?nico barrido%
+% de las N medidas, y luego el matlab hace un loop para repetir %
+% ese barrido las veces que haga falta.                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Pregunta la cantidad de scans
+format long
+close all
+clear all
+instrreset;
+
+mux = visa('ni','GPIB0::9::INSTR');  % multi switch
+
+fopen(mux);
+fprintf(mux,'*CLS');
+multiplexorID = query(mux,'*IDN?')
+
+
+%%
+a = 1;
+N = input('Ingrese el número de scans: ');
+paus=input('tiempo entre scans (minimo, 2 segundos): ');
+try
+    ScanInterval = paus;% ? Delay (in secs) between scans
+    numberScans = N;% ? Number of scan sweeps to measure 
+    channelDelay = 0.2;% ? Delay (in secs) between relay closure and measurement
+    scanList= '(@101,102,103,104,105,106,107)';%List of channels to scan in each scan
+
+    %set the channel list to scan
+    str=sprintf('ROUTE:SCAN %s',scanList);
+    fprintf(mux,str);
+
+    %query number of channels to scan
+    j=query(mux,'ROUTE:SCAN:SIZE?');
+    ncanales=str2double(j);
+
+    fprintf(mux,'FORMAT:READING:CHAN ON');%" ? Return channel number with each reading
+    fprintf(mux,'FORMAT:READING:TIME ON');%"? Return time stamp with each reading
+    fprintf(mux,'FORMat:READing:TIME:TYPE  ABSolute');% elige el formato para el tiempo
+    fprintf(mux,'FORMat:READing:UNIT ON'); %%
+
+    %? Set the delay (in seconds) between relay closure and measurement
+    str=sprintf('ROUT:CHAN:DELAY %2.1f , %s',channelDelay,scanList);
+    fprintf(mux,str);
+
+    % ? Number of scan sweeps to measure 
+    str=sprintf('TRIG:COUNT %d',numberScans);%
+    fprintf(mux,str);
+
+    %??
+    fprintf(mux,'TRIG:SOUR TIMER');
+
+    % Delay (in secs) between scans
+    str=sprintf('TRIG:TIMER %1.1f',ScanInterval);
+    fprintf(mux,str);
+
+    archivo_de_datos = strcat(datestr(now,'dd-mmmm-yyyy_HH-MM-SS_'));       %crea el nombre del archivo de datos
+    FILE = fopen(archivo_de_datos,'at');
+    fprintf(FILE,'%s','  Canal;  Tiempo1;  Valor1;  Canal; Tiempo2;  Valor2;  Canal; Tiempo3;  Valor3;  Canal; Tiempo4;  Valor4; Canal; Tiempo5;  Valor5; Canal; Tiempo6;  Valor6; Canal; Tiempo7;  Valor7' );
+    fprintf(FILE,'\n');
+    %START OF ONE SCAN LOOP
+    hold on
+    for i=1:numberScans
+        NumeroDeMedicion = i %para saber por que medicion vamos
+        %start scan
+        j=query(mux,'INIT;:SYSTEM:TIME:SCAN?');
+
+        %wait to the end of the scan 
+        pause(ScanInterval);
+        %pause(2);
+
+        %query number of datapoints per scan
+        strNdata=query(mux,'DATA:POINTS?');
+        Ndata=str2double(strNdata);
+
+        %query the values of all the scanned channels
+        DATA=nan(Ndata,1);
+        TIME=nan(Ndata,1);
+
+
+        HOUR=nan(1,1);
+        MIN=nan(1,1);
+        SEC=nan(1,1);
+
+        CHAN=nan(Ndata,1);
+        
+        %Guardar variables numero dde medicion
+%        fprintf(FILE,'\n');
+%        fprintf(FILE,'%f',i);
+        
+        for inddata=1:Ndata
+            %query one data value
+            %contains the number of channel
+            str=query(mux,'DATA:REMOVE? 1');
+
+            channel=sscanf(str(45:47),'%d')-100;
+
+            %contains the measurement 
+            DATA(inddata)=sscanf(str,'%f,%f,%f');        
+            %contains the time from the scan start
+            HOUR=sscanf(str(32:end),'%f');
+            MIN=sscanf(str(35:end),'%f');
+            SEC=sscanf(str(38:end),'%f');
+             
+            TIME(inddata) = HOUR* 3600 + MIN * 60 + SEC;  
+
+            if(i==1)
+                AUX_TIME = TIME(1);
+            end
+
+            fprintf(FILE,'%d',channel);
+            fprintf(FILE,'%s','  ;  ');
+            fprintf(FILE,'%f',TIME(inddata)-AUX_TIME);
+            fprintf(FILE,'%s','  ;  ');
+            fprintf(FILE,'%f',DATA(inddata));
+            if (channel == 7)          
+                fprintf(FILE,'\n');
+            else
+                fprintf(FILE,'  ;  ');
+            end
+        
+            plot( (TIME(inddata)-AUX_TIME) ,DATA(inddata),'ob');
+        end
+
+        
+        %save(archivo_de_datos,'-append', 'i', 'TIME(1)', 'DATA(1)', 'TIME(2)', 'DATA(2)', 'TIME(3)', 'DATA(3)', 'TIME(4)', 'DATA(4)', 'TIME(5)', 'DATA(5)', 'TIME(6)', 'DATA(6)', 'TIME(7)', 'DATA(7)') ; %guarda las variables N, y tiempo y voltaje de cada canal
+        %fprintf(FILE,'%d',i,'%s',';','%f',TIME(1),'%s',';','%f',DATA(1),'%s',';','%f',TIME(2),'%s',';','%f', DATA(2),'%s',';','%f', TIME(3),'%s',';','%f', DATA(3), '%s',';','%f',TIME(4),'%s',';','%f', DATA(4),'%s',';','%f',TIME(5),'%s',';','%f',DATA(5),'%s',';','%f',TIME(6),'%s',';','%f', DATA(6),'%s',';','%f', TIME(7),'%s',';','%f', DATA(7),'%s','\n');
+
+        %fprintf(FILE,'%f','\n')
+        %plot(TIME(1),DATA(1),'hb',TIME(2),DATA(2),'hg',TIME(3),DATA(3),'hr',TIME(4),DATA(4),'hc',TIME(5),DATA(5),'hm',TIME(6),DATA(6),'hk',TIME(7),DATA(7),'hy') %ploteo de los datos en la medicion, superpuestos a los datos de las mediciones anteriores
+        %pause(ScanInterval+0.2); % directamente pausa el tiempo que dijimos que pause al principio
+    end
+    hold off
+    fclose(FILE);
+catch exception %si algo no funciona, de todas formas termina la coneccion con el multiplexor
+    %faltaria algo que termine la conexion si uno lo para manualmente con
+    %ctrl+c, por ahora, suponemos que alcanza con un close all al principio
+    fprintf(mux,'ABORT');
+    fprintf(mux,'*CLS');
+    %fprintf(mux,'*RST');
+    fclose(mux) 
+    throw(exception)
+end
+fprintf(mux,'*CLS');
+%fprintf(mux,'*RST');
+%close connection
+
+fclose(mux)
