@@ -70,35 +70,36 @@ T = np.array([tiempos1_np, tiempos2_np, tiempos3_np, tiempos4_np, tiempos5_np, t
 
 #%%Defino la funcion que uso para fittear y la pruebo con set de tiempos de prueba
 x = 0.081
-k = 0.000102
 K = 380
 T0 = 28.5
 
-def func_difusividad(t, F0):
+def func_difusividad(t, F0, k):
     
     return T0 + 2*(F0/K)*(np.sqrt(t*k/np.pi) * np.exp(-(x**2) / (4*k*t))- x/2 * special.erfc(x/(2*np.sqrt(k*t))))
 
 t_prueba = np.linspace(2250, 6500, 100000)
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(t_prueba, func_difusividad(t_prueba,97812))
+plt.plot(t_prueba, func_difusividad(t_prueba,97812, 0.000102))
 plt.xlabel('Tiempo (s)')
 plt.ylabel('Temperatura (°C)')
 plt.show()
 
 #%%Ciclo for
-p0 = 97812
+p0 = 97812, 0.000102
 
-p_opt = np.zeros(7)
+p_opt = np.zeros((7,2))
 p_cov = np.zeros(7)
 F0 = np.zeros(7)
+k = np.zeros(7)
 std = np.zeros(7)
 TCs = ['TC 1', 'TC 2', 'TC 3', 'TC 4', 'TC 5', 'TC 6', 'TC 7']
 
 for i in range(7):
     p_opt[i], p_cov[i] = curve_fit(func_difusividad, T[i], V[i], p0)
-    F0[i] = p_opt[i]
-    std[i] = np.sqrt(p_cov[i])
+    F0[i] = p_opt[i, 0]
+    k[i] = p_opt[i, 1]
+    std[i] = np.sqrt(p_cov[i, i])
     figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
     plt.plot(T[i], func_difusividad(T[i], F0[i]))
     plt.plot(T[i], V[i], 'kx')
