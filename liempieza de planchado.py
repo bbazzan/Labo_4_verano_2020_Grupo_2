@@ -88,23 +88,24 @@ plt.show()
 #%%Ciclo for
 p0 = 97812, 0.000102
 
-p_opt = np.zeros((7,2))
-p_cov = np.zeros(7)
-F0 = np.zeros(7)
-k = np.zeros(7)
-std = np.zeros(7)
+p_opt = np.zeros((7, 2))
+F0 = np.zeros((7,1))
+k = np.zeros((7,1))
+std = np.zeros((7,2))
 TCs = ['TC 1', 'TC 2', 'TC 3', 'TC 4', 'TC 5', 'TC 6', 'TC 7']
 
 for i in range(7):
-    p_opt[i], p_cov[i] = curve_fit(func_difusividad, T[i], V[i], p0)
+    p_opt[i], p_cov = curve_fit(func_difusividad, T[i], V[i], p0)
     F0[i] = p_opt[i, 0]
     k[i] = p_opt[i, 1]
-    std[i] = np.sqrt(p_cov[i, i])
+    std[i, 0] = np.sqrt(p_cov[0, 0])
+    std[i, 1] = np.sqrt(p_cov[1, 1])
     figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-    plt.plot(T[i], func_difusividad(T[i], F0[i]))
+    plt.plot(T[i], func_difusividad(T[i], F0[i], k[i]))
     plt.plot(T[i], V[i], 'kx')
     plt.title(TCs[i])
     plt.xlabel('Tiempo (s)')
     plt.ylabel('Temperatura (°C)')
     plt.show()
-    print('F0 = ', F0[i], '+/-', std[i])
+    print('F0 = ', F0[i], '+/-', std[i,0])
+    print('k = ', k[i], '+/-', std[i,1])
