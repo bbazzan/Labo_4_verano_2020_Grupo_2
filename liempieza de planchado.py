@@ -70,6 +70,11 @@ tiempos5_np = tiempos5.to_numpy()
 tiempos6_np = tiempos6.to_numpy()
 tiempos7_np = tiempos7.to_numpy()
 
+err_temp = np.zeros(425)
+err_temp[:] = 2.2
+err_t = np.zeros(425)
+err_t[:] = 1
+
 #%%Para hacer el ciclo for pongo todo en dos matrices: una de valores y una de tiempos. Cada tira queda en una de las filas de la matriz
 V = np.array([valores1_np, valores2_np, valores3_np, valores4_np, valores5_np, valores6_np, valores7_np])
 
@@ -104,12 +109,12 @@ std = np.zeros(7)
 TCs = ['TC 1', 'TC 2', 'TC 3', 'TC 4', 'TC 5', 'TC 6', 'TC 7']
 
 for i in range(7):
-    p_opt[i], p_cov[i] = curve_fit(func_difusividad, T[i], V[i], p0)
+    p_opt[i], p_cov[i] = curve_fit(func_difusividad, T[i], V[i], p0, sigma=err_temp, absolute_sigma=True)
     F0[i] = p_opt[i]
     std[i] = np.sqrt(p_cov[i])
     figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
     plt.plot(T[i], func_difusividad(T[i], F0[i]))
-    plt.plot(T[i], V[i], 'kx')
+    plt.errorbar(T[i], V[i], err_temp, err_t, color='r')
     plt.title(TCs[i])
     plt.xlabel('Tiempo (s)')
     plt.ylabel('Temperatura (°C)')
