@@ -30,21 +30,21 @@ plt.show()
 
 
 #%%Separo los distintos valores y tiempos correspondientes a cada termocupla
-valores1 = data.iloc[125:300,1]
-valores2 = data.iloc[125:300,3]
-valores3 = data.iloc[125:300,5]
-valores4 = data.iloc[125:300,7]
-valores5 = data.iloc[125:300,9]
-valores6 = data.iloc[250:300,11]
-valores7 = data.iloc[275:300,13]
+valores1 = data.iloc[125:350,1]
+valores2 = data.iloc[125:350,3]
+valores3 = data.iloc[150:350,5]
+valores4 = data.iloc[200:350,7]
+valores5 = data.iloc[225:350,9]
+valores6 = data.iloc[250:350,11]
+valores7 = data.iloc[275:350,13]
 
-tiempos1 = data.iloc[125:300,0]
-tiempos2 = data.iloc[125:300,2]
-tiempos3 = data.iloc[125:300,4]
-tiempos4 = data.iloc[125:300,6]
-tiempos5 = data.iloc[125:300,8]
-tiempos6 = data.iloc[250:300,10]
-tiempos7 = data.iloc[275:300,12]
+tiempos1 = data.iloc[125:350,0]
+tiempos2 = data.iloc[125:350,2]
+tiempos3 = data.iloc[150:350,4]
+tiempos4 = data.iloc[200:350,6]
+tiempos5 = data.iloc[225:350,8]
+tiempos6 = data.iloc[250:350,10]
+tiempos7 = data.iloc[275:350,12]
 
 #%%Transformo en arrays de numpy
 valores1_np = valores1.to_numpy() 
@@ -95,10 +95,6 @@ tiempos5_np = tiempos5_np - t0_5 + 0.000001
 tiempos6_np = tiempos6_np - t0_6 + 0.000001
 tiempos7_np = tiempos7_np - t0_7 + 0.000001
 
-err_temp = np.zeros(175)
-err_temp[:] = 2.2
-err_t = np.zeros(175)
-err_t[:] = 1
 #%%Ploteo los datos para ver que onda
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(tiempos1_np, valores1_np, tiempos2_np, valores2_np, tiempos3_np, valores3_np, tiempos4_np, valores4_np, tiempos5_np, valores5_np, tiempos7_np, valores7_np)
@@ -118,6 +114,7 @@ def temperatura(ts, x, A, B):
     return (A*((B*ts/np.pi)**0.5*np.exp(-(x**2)/(4*B*ts))-x/2*(1-special.erfc(x/(2*(B*ts)**0.5))))) 
 
 #%%Ciclo for
+'''
 x = np.array([0.0814, 0.1231, 0.164, 0.2119, 0.2496, 0.4105])
 TCs = ['TC 1', 'TC 2', 'TC 3', 'TC 4', 'TC 5', 'TC 7']
 A = np.zeros(6)
@@ -142,4 +139,131 @@ for i in range(6):
     print(errA[i])
     print(B[i])
     print(errB[i])
-    
+'''
+
+#%%
+x  = np.array([0.0814, 0.1231, 0.164, 0.2119, 0.2496, 0.4105])
+TCs = ['TC 1', 'TC 2', 'TC 3', 'TC 4', 'TC 5', 'TC 7']
+
+p_opt_1, p_cov_1 = curve_fit(lambda ts, A, B:temperatura(ts, x[0], A, B), T[0], V[0], [514.8, 0.0002])
+A_1 = p_opt_1[0]
+B_1 = p_opt_1[1]
+err_A_1 = np.sqrt(p_cov_1[0,0])
+err_B_1 = np.sqrt(p_cov_1[1,1])
+err_temp_1 = np.zeros(225)
+err_temp_1[:] = 2.2
+err_t_1 = np.zeros(225)
+err_t_1[:] = 1
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(T[0], temperatura(T[0], x[0], A_1, B_1))
+plt.errorbar(T[0], V[0], err_temp_1, err_t_1, color='r')
+plt.title(TCs[0])
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Temperatura (°C)')
+print('F0 =', A_1)
+print('err_F0 =', err_A_1)
+print('k =', B_1)
+print('err_k =', err_B_1)
+
+p_opt_2, p_cov_2 = curve_fit(lambda ts, A, B:temperatura(ts, x[1], A, B), T[1], V[1], [514.8, 0.0002])
+A_2 = p_opt_2[0]
+B_2 = p_opt_2[1]
+err_A_2 = np.sqrt(p_cov_1[0,0])
+err_B_2 = np.sqrt(p_cov_1[1,1])
+err_temp_2 = np.zeros(225)
+err_temp_2[:] = 2.2
+err_t_2 = np.zeros(225)
+err_t_2[:] = 1
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(T[1], temperatura(T[1], x[1], A_2, B_2))
+plt.errorbar(T[1], V[1], err_temp_2, err_t_2, color='r')
+plt.title(TCs[1])
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Temperatura (°C)')
+print('F0 =', A_2)
+print('err_F0 =', err_A_2)
+print('k =', B_2)
+print('err_k =', err_B_2)
+
+p_opt_3, p_cov_3 = curve_fit(lambda ts, A, B:temperatura(ts, x[2], A, B), T[2], V[2], [514.8, 0.0002])
+A_3 = p_opt_3[0]
+B_3 = p_opt_3[1]
+err_A_3 = np.sqrt(p_cov_3[0,0])
+err_B_3 = np.sqrt(p_cov_3[1,1])
+err_temp_3 = np.zeros(200)
+err_temp_3[:] = 2.2
+err_t_3 = np.zeros(200)
+err_t_3[:] = 1
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(T[2], temperatura(T[2], x[2], A_3, B_3))
+plt.errorbar(T[2], V[2], err_temp_3, err_t_3, color='r')
+plt.title(TCs[2])
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Temperatura (°C)')
+print('F0 =', A_3)
+print('err_F0 =', err_A_3)
+print('k =', B_3)
+print('err_k =', err_B_3)
+
+p_opt_4, p_cov_4 = curve_fit(lambda ts, A, B:temperatura(ts, x[3], A, B), T[3], V[3], [514.8, 0.0002])
+A_4 = p_opt_4[0]
+B_4 = p_opt_4[1]
+err_A_4 = np.sqrt(p_cov_4[0,0])
+err_B_4 = np.sqrt(p_cov_4[1,1])
+err_temp_4 = np.zeros(150)
+err_temp_4[:] = 2.2
+err_t_4 = np.zeros(150)
+err_t_4[:] = 1
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(T[3], temperatura(T[3], x[3], A_4, B_4))
+plt.errorbar(T[3], V[3], err_temp_4, err_t_4, color='r')
+plt.title(TCs[3])
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Temperatura (°C)')
+print('F0 =', A_4)
+print('err_F0 =', err_A_4)
+print('k =', B_4)
+print('err_k =', err_B_4)
+
+p_opt_5, p_cov_5 = curve_fit(lambda ts, A, B:temperatura(ts, x[4], A, B), T[4], V[4], [514.8, 0.0002])
+A_5 = p_opt_5[0]
+B_5 = p_opt_5[1]
+err_A_5 = np.sqrt(p_cov_5[0,0])
+err_B_5 = np.sqrt(p_cov_5[1,1])
+err_temp_5 = np.zeros(125)
+err_temp_5[:] = 2.2
+err_t_5 = np.zeros(125)
+err_t_5[:] = 1
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(T[4], temperatura(T[4], x[4], A_5, B_5))
+plt.errorbar(T[4], V[4], err_temp_5, err_t_5, color='r')
+plt.title(TCs[4])
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Temperatura (°C)')
+print('F0 =', A_5)
+print('err_F0 =', err_A_5)
+print('k =', B_5)
+print('err_k =', err_B_5)
+
+p_opt_7, p_cov_7 = curve_fit(lambda ts, A, B:temperatura(ts, x[5], A, B), T[5], V[5], [514.8, 0.0002])
+A_7 = p_opt_7[0]
+B_7 = p_opt_7[1]
+err_A_7 = np.sqrt(p_cov_7[0,0])
+err_B_7 = np.sqrt(p_cov_7[1,1])
+err_temp_7 = np.zeros(75)
+err_temp_7[:] = 2.2
+err_t_7 = np.zeros(75)
+err_t_7[:] = 1
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(T[5], temperatura(T[5], x[5], A_7, B_7))
+plt.errorbar(T[5], V[5], err_temp_7, err_t_7, color='r')
+plt.title(TCs[5])
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Temperatura (°C)')
+print('F0 =', A_7)
+print('err_F0 =', err_A_7)
+print('k =', B_7)
+print('err_k =', err_B_7)
+
+plt.show()
+
