@@ -13,13 +13,14 @@ from scipy.optimize import curve_fit
 from scipy import special
 
 #%%
-lat1 = pd.read_csv('lat1_csv.csv')
-f_lat1 = lat1.iloc[:,0]
-f_lat1 = pd.to_numeric(f_lat1)
-x_lat1 = lat1.iloc[:,1]
-x_lat1 = pd.to_numeric(x_lat1)
-y_lat1 = lat1.iloc[:,2]
-y_lat1 = pd.to_numeric(y_lat1)
+file = input('Nombre del archivo: ')
+data = pd.read_csv(file)
+f = data.iloc[:,0]
+f = pd.to_numeric(f)
+x = data.iloc[:,1]
+x = pd.to_numeric(x)
+y = data.iloc[:,2]
+y = pd.to_numeric(y)
 
 cero = pd.read_csv('cero_csv.csv')
 f_cero = cero.iloc[:,0]
@@ -30,52 +31,68 @@ y_cero = cero.iloc[:,2]
 y_cero = pd.to_numeric(y_cero)
 
 for i in range(397):
-    x_lat1[i] = x_lat1[i] - x_cero[i]
-    y_lat1[i] = y_lat1[i] - y_cero[i]
+    x[i] = x[i] - x_cero[i]
+    y[i] = y[i] - y_cero[i]
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(f_lat1, x_lat1)
-plt.plot(f_lat1, y_lat1)
+plt.plot(f, x, label='Re(V)')
+plt.plot(f, y, label='Im(V)')
 plt.grid(True)
+plt.legend()
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('Voltaje (V)')
 plt.ylim(-0.002, 0.008)
 plt.xlim(0, 22500)
 plt.show()
 
 #%%
-z_lat1 = np.zeros(397)
+z = np.zeros(397)
 
 for i in range(397):
-    z_lat1[i] = -y_lat1[i]/x_lat1[i]
+    z[i] = -y[i]/x[i]
     
-figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(f_lat1, z_lat1)
-plt.grid(True)
-plt.show()
+#figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+#plt.plot(f, z)
+#plt.grid(True)
+#plt.show()
 
 #%%
-X_lat1 = np.zeros(397)
+X = np.zeros(397)
 
 for i in range(397):
-    X_lat1[i] = -0.01 + 3.06*z_lat1[i] - 0.105*z_lat1[i]**2 + 0.167*z_lat1[i]**3
+    X[i] = -0.01 + 3.06*z[i] - 0.105*z[i]**2 + 0.167*z[i]**3
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(f_lat1, X_lat1)
+plt.plot(f, X)
 plt.grid(True)
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('X')
 plt.show()
 
 #%%
-X_lat1_lin = X_lat1[11:116]
-f_lat1_lin = f_lat1[11:116]
+X_lin = []
+f_lin = []
+for i in range (397):
+    if X[i] > 1 and X[i] < 10:
+        X_lin.append(X[i])
+        f_lin.append(f[i])
+X_lin = np.array(X_lin)
+f_lin = np.array(f_lin)
 
-def func_x(f, rho):
-    return 0.00000395*0.000042706225*f/rho
+r = float(input('Radio de la muestra (en metros): '))
 
-p_opt, p_cov = curve_fit(func_x, f_lat1_lin, X_lat1_lin, [0.0000000282])
-print(p_opt)
-print(np.sqrt(p_cov[0]))
+def func_X(f, rho):
+    return 0.00000395*(r**2)*f/rho
+
+p_opt, p_cov = curve_fit(func_X, f_lin, X_lin, [0.0000000282])
+print('Pendiente del ajuste: ', p_opt)
+print('Dev std: ', np.sqrt(p_cov[0]))
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(f_lat1_lin, X_lat1_lin)
-plt.plot(f_lat1_lin, func_x(f_lat1_lin, p_opt))
+plt.plot(f_lin, X_lin, label='X')
+plt.plot(f_lin, func_X(f_lin, p_opt), label='Ajuste lineal')
 plt.grid(True)
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('X')
+plt.legend()
 plt.show()
