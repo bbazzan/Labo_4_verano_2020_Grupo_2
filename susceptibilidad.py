@@ -147,7 +147,7 @@ plt.show()
 chi = np.zeros(len(f_lin), dtype=np.complex128)
 
 for i in range(len(f_lin)):
-    chi[i] = complex(chi_p[i], chi_pp[i])
+    chi[i] = complex(chi_p[i]/p_opt_pol_p, chi_pp[i]/p_opt_pol_pp)
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(X_delta, chi, '.', label='chi')
