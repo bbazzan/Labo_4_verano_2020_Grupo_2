@@ -120,18 +120,23 @@ chi_p = np.absolute(chi_p)
 chi_pp = np.absolute(chi_pp)
 
 
-def func_chi_p(X):
-    return -0.088 + 0.1503*X + 0.01566*X**2 - 0.00737*X**3 + 0.0007755*X**4 - 0.00002678*X**5
+def func_chi_p(X, k):
+    return k*(-0.088 + 0.1503*X + 0.01566*X**2 - 0.00737*X**3 + 0.0007755*X**4 - 0.00002678*X**5)
 
-def func_chi_pp(X):
-    return -0.048 + 0.378*X - 0.12207*X**2 + 0.017973*X**3 - 0.0012777*X**4 + 0.00003542*X**5
+def func_chi_pp(X, k):
+    return k*(-0.048 + 0.378*X - 0.12207*X**2 + 0.017973*X**3 - 0.0012777*X**4 + 0.00003542*X**5)
 
+p_opt_pol_p, p_cov_pol_p = curve_fit(func_chi_p, X_lin, chi_p)
+print(p_opt_pol_p, np.sqrt(p_cov_pol_p[0]))
+
+p_opt_pol_pp, p_cov_pol_pp = curve_fit(func_chi_pp, X_lin, chi_pp)
+print(p_opt_pol_pp, np.sqrt(p_cov_pol_pp[0]))
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(X_delta, chi_p, '.', label='chi_p')
 plt.plot(X_delta, chi_pp, '.', label='chi_pp')
-plt.plot(X_delta, func_chi_p(X_lin), label='Ajuste chi_p')
-plt.plot(X_delta, func_chi_pp(X_lin), label='Ajuste chi_pp')
+plt.plot(X_delta, func_chi_p(X_lin, p_opt_pol_p), label='Ajuste chi_p')
+plt.plot(X_delta, func_chi_pp(X_lin, p_opt_pol_pp), label='Ajuste chi_pp')
 plt.grid(True)
 plt.xlabel('r^2/delta^2')
 plt.ylabel('Susceptibilidad')
@@ -161,7 +166,7 @@ chi_bessel = np.absolute(chi_bessel)
               
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(X_delta, chi, '.', label='chi')
-plt.plot(X_delta, chi_bessel, '.', label='chi_bessle')
+plt.plot(X_delta, chi_bessel, '.', label='chi_bessel')
 plt.grid(True)
 plt.xlabel('r^2/delta^2')
 plt.ylabel('Susceptibilidad')
