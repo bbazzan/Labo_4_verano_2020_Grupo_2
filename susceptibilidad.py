@@ -35,8 +35,8 @@ for i in range(397):
     y[i] = y[i] - y_cero[i]
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(f, x, label='Re(V)')
-plt.plot(f, y, label='Im(V)')
+plt.plot(f, x, '.', label='Re(V)')
+plt.plot(f, y, '.', label='Im(V)')
 plt.grid(True)
 plt.legend()
 plt.xlabel('Frecuencia (Hz)')
@@ -58,7 +58,7 @@ for i in range(len(data)):
     X[i] = -0.01 + 3.06*z[i] - 0.105*z[i]**2 + 0.167*z[i]**3
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(f, X)
+plt.plot(f, X, '.')
 plt.grid(True)
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('X')
@@ -89,7 +89,7 @@ print('Dev std: ', np.sqrt(p_cov[0]))
 rho = p_opt
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(f_lin, X_lin, label='X')
+plt.plot(f_lin, X_lin, '.', label='X')
 plt.plot(f_lin, func_X(f_lin, rho), label='Ajuste lineal')
 plt.grid(True)
 plt.xlabel('Frecuencia (Hz)')
@@ -97,7 +97,7 @@ plt.ylabel('X')
 plt.legend()
 plt.show()
 
-#%%defino chi_p y chi_pp a partir de las mediciones (a menos de una constante)
+#%%defino chi_p y chi_pp a partir de las mediciones (a menos de una constante) y ajusto los polinomios
 chi_p = np.zeros(len(f_lin))
 chi_pp = np.zeros(len(f_lin))
 delta_lin = np.zeros(len(f_lin))
@@ -116,25 +116,52 @@ for i in range(len(f_lin)):
     chi_p[i] = -(y_lin[i])/(2*np.pi*f_lin[i])
     chi_pp[i] = (x_lin[i])/(2*np.pi*f_lin[i])
 
-figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(X_delta, chi_p, label='chi_p')
-plt.plot(X_delta, chi_pp, label='chi_pp')
-plt.grid(True)
-plt.xlabel('r^2/delta^2')
-plt.ylabel('Susceptibilidad')
-plt.legend()
-plt.show()
+chi_p = np.absolute(chi_p)
+chi_pp = np.absolute(chi_pp)
 
-#%%defino los polinomios que aproximan chi_p y chi_pp
+
 def func_chi_p(X):
     return -0.088 + 0.1503*X + 0.01566*X**2 - 0.00737*X**3 + 0.0007755*X**4 - 0.00002678*X**5
 
 def func_chi_pp(X):
     return -0.048 + 0.378*X - 0.12207*X**2 + 0.017973*X**3 - 0.0012777*X**4 + 0.00003542*X**5
 
+
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(X_delta, func_chi_p(X_lin), label='chi_p')
-plt.plot(X_delta, func_chi_pp(X_lin), label='chi_pp')
+plt.plot(X_delta, chi_p, '.', label='chi_p')
+plt.plot(X_delta, chi_pp, '.', label='chi_pp')
+plt.plot(X_delta, func_chi_p(X_lin), label='Ajuste chi_p')
+plt.plot(X_delta, func_chi_pp(X_lin), label='Ajuste chi_pp')
+plt.grid(True)
+plt.xlabel('r^2/delta^2')
+plt.ylabel('Susceptibilidad')
+plt.legend()
+plt.show()
+
+#%%Bessel
+chi = np.zeros(len(f_lin), dtype=np.complex128)
+
+for i in range(len(f_lin)):
+    chi[i] = complex(chi_p[i], chi_pp[i])
+
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(X_delta, chi, '.', label='chi')
+plt.grid(True)
+plt.xlabel('r^2/delta^2')
+plt.ylabel('Susceptibilidad')
+plt.legend()
+plt.show()
+
+chi_bessel = np.zeros(len(f_lin), dtype=np.complex128)
+
+for i in range(len(f_lin)):
+    chi_bessel[i] = 2*(special.jv(1, (complex(1,1)/delta_lin[i])*r))/((complex(1,1)/delta_lin[i])*r * special.jv(0, (complex(1,1)/delta_lin[i])*r)) -1
+
+chi_bessel = np.absolute(chi_bessel)
+              
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(X_delta, chi, '.', label='chi')
+plt.plot(X_delta, chi_bessel, '.', label='chi_bessle')
 plt.grid(True)
 plt.xlabel('r^2/delta^2')
 plt.ylabel('Susceptibilidad')
