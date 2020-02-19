@@ -124,3 +124,19 @@ plt.xlabel('r^2/delta^2')
 plt.ylabel('Susceptibilidad')
 plt.legend()
 plt.show()
+
+#%%defino los polinomios que aproximan chi_p y chi_pp
+def func_chi_p(X):
+    return -0.088 + 0.1503*X + 0.01566*X**2 - 0.00737*X**3 + 0.0007755*X**4 - 0.00002678*X**5
+
+def func_chi_pp(X):
+    return -0.048 + 0.378*X - 0.12207*X**2 + 0.017973*X**3 - 0.0012777*X**4 + 0.00003542*X**5
+
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(X_delta, func_chi_p(X_lin), label='chi_p')
+plt.plot(X_delta, func_chi_pp(X_lin), label='chi_pp')
+plt.grid(True)
+plt.xlabel('r^2/delta^2')
+plt.ylabel('Susceptibilidad')
+plt.legend()
+plt.show()
