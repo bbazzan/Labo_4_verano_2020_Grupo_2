@@ -181,3 +181,45 @@ plt.xlabel('r^2/delta^2')
 plt.ylabel('Susceptibilidad')
 plt.legend()
 plt.show()
+
+#%%
+delta = np.zeros(len(f))
+X_delta_total = np.zeros(len(f))
+chi_p_total = np.zeros(len(f))
+chi_pp_total = np.zeros(len(f))
+chi_total = np.zeros(len(f), dtype=np.complex128)
+chi_bessel_total = np.zeros(len(f), dtype=np.complex128)
+
+for i in range(len(f)):
+    delta[i] = np.sqrt(2*rho/(0.0000004*np.pi*2*np.pi*f[i]))
+    X_delta_total[i] = r**2/(delta[i]**2)
+
+for i in range(len(f)):
+    chi_p_total[i] = -(y[i])/(2*np.pi*f[i])
+    chi_pp_total[i] = (x[i])/(2*np.pi*f[i])
+
+for i in range(len(f)):
+    chi_total[i] = complex(chi_p_total[i]/p_opt_pol_p, chi_pp_total[i]/p_opt_pol_pp)
+    
+for i in range(len(f)):
+    chi_bessel_total[i] = (2*(special.jv(1, (complex(1,1)/delta[i])*r))/((complex(1,1)/delta[i])*r * special.jv(0, (complex(1,1)/delta[i])*r))) -1
+
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(X[:150], abs(chi_p_total/p_opt_pol_p)[:150], '.', label='chi_p_total')
+plt.plot(X[:150], abs(chi_bessel_total.real)[:150], '.', label='Re(chi_bessel_total)')
+plt.plot(X[:150], abs(func_chi_p(X,1))[:150], '.', label='Polinomio_pp')
+plt.grid(True)
+plt.xlabel('r^2/delta^2')
+plt.ylabel('Susceptibilidad')
+plt.legend()
+plt.show()
+
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(X[:150], abs(chi_pp_total/p_opt_pol_pp)[:150], '.', label='chi_pp_total')
+plt.plot(X[:150], abs(chi_bessel_total.imag)[:150], '.', label='Im(chi_bessel_total)')
+plt.plot(X[:150], abs(func_chi_pp(X,1))[:150], '.', label='Polinomio_p')
+plt.grid(True)
+plt.xlabel('r^2/delta^2')
+plt.ylabel('Susceptibilidad')
+plt.legend()
+plt.show()
