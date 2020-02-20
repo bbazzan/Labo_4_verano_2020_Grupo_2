@@ -116,8 +116,8 @@ for i in range(len(f_lin)):
     chi_p[i] = -(y_lin[i])/(2*np.pi*f_lin[i])
     chi_pp[i] = (x_lin[i])/(2*np.pi*f_lin[i])
 
-chi_p = np.absolute(chi_p)
-chi_pp = np.absolute(chi_pp)
+chi_p = abs(chi_p)
+chi_pp = abs(chi_pp)
 
 
 def func_chi_p(X, k):
@@ -149,24 +149,33 @@ chi = np.zeros(len(f_lin), dtype=np.complex128)
 for i in range(len(f_lin)):
     chi[i] = complex(chi_p[i]/p_opt_pol_p, chi_pp[i]/p_opt_pol_pp)
 
+chi_bessel = np.zeros(len(f_lin), dtype=np.complex128)
+
+for i in range(len(f_lin)):
+    chi_bessel[i] = (2*(special.jv(1, (complex(1,1)/delta_lin[i])*r))/((complex(1,1)/delta_lin[i])*r * special.jv(0, (complex(1,1)/delta_lin[i])*r))) -1
+
+mod_chi_bessel = abs(chi_bessel)
+real_chi_bessel = chi_bessel.real
+imag_chi_bessel = chi_bessel.imag
+
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(X_delta, chi, '.', label='chi')
+plt.plot(X_delta, chi_p/p_opt_pol_p, '.', label='chi_p')
+plt.plot(X_delta, chi_pp/p_opt_pol_pp, '.', label='chi_pp')
+plt.plot(X_delta, abs(real_chi_bessel), '.', label='Re(chi_bessel)')
+plt.plot(X_delta, abs(imag_chi_bessel), '.', label='Im(chi_bessel)')
 plt.grid(True)
 plt.xlabel('r^2/delta^2')
 plt.ylabel('Susceptibilidad')
 plt.legend()
 plt.show()
-
-chi_bessel = np.zeros(len(f_lin), dtype=np.complex128)
-
-for i in range(len(f_lin)):
-    chi_bessel[i] = 2*(special.jv(1, (complex(1,1)/delta_lin[i])*r))/((complex(1,1)/delta_lin[i])*r * special.jv(0, (complex(1,1)/delta_lin[i])*r)) -1
-
-chi_bessel = np.absolute(chi_bessel)
               
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(X_delta, chi, '.', label='chi')
-plt.plot(X_delta, chi_bessel, '.', label='chi_bessel')
+plt.plot(X_delta, abs(chi), '.', label='chi')
+plt.plot(X_delta, mod_chi_bessel, '.', label='chi_bessel')
+#plt.plot(X_delta, abs(real_chi_bessel), '.', label='Re(chi_bessel)')
+#plt.plot(X_delta, abs(imag_chi_bessel), '.', label='Im(chi_bessel)')
+#plt.plot(X_delta, func_chi_p(X_lin, 1),)
+#plt.plot(X_delta, func_chi_pp(X_lin, 1),)
 plt.grid(True)
 plt.xlabel('r^2/delta^2')
 plt.ylabel('Susceptibilidad')
