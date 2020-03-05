@@ -41,7 +41,7 @@ figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(f_res, t_res, '.')
 plt.grid(True)
 plt.xlabel('Frecuencia (Hz)')
-plt.ylabel('ransferencia')
+plt.ylabel('Transferencia')
 plt.show()
 
 data_anti = pd.read_csv('Antiresonancia.csv')
@@ -168,3 +168,23 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
+#%%
+camp_anti = pd.read_csv('Campana_antiresonancia_fina_csv', header=None)
+camp_anti = camp_anti.transpose()
+camp_anti.columns = ['Frecuencia', 'V_out', 'Fase']
+f_anti_fina = camp_anti.iloc[:,0]
+v_out_anti_fina = camp_anti.iloc[:,1]
+phi_anti_fina = camp_anti.iloc[:,2]
+v_in_anti_fina = np.zeros(len(v_out_anti_fina))
+for i in range(len(v_out_anti_fina)):
+    v_in_anti_fina[i] = 1/np.sqrt(2)
+Trans_anti_fina = v_out_anti_fina/v_in_anti_fina
+
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(f_anti_fina, Trans_anti_fina, '.', label='T(f)')
+#plt.plot(f, func_trans_res_v2(f, params_4[0], params_4[1], params_4[2]), label='Ajuste')
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('Transferencia')
+plt.grid(True)
+plt.legend()
+plt.show()
