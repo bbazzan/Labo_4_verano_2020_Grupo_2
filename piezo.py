@@ -320,3 +320,47 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
+#%%
+for i,j in enumerate(trans_reloj_resistencia):
+    if j == max(trans_reloj_resistencia):
+        index_resistencia = i
+for i,j in enumerate(trans_reloj_1A_caliente):
+    if j == max(trans_reloj_1A_caliente):
+        index_1A_caliente = i
+for i,j in enumerate(trans_reloj_medioA_caliente):
+    if j == max(trans_reloj_medioA_caliente):
+        index_medioA_caliente = i
+for i,j in enumerate(trans_reloj_t_amb):
+    if j == max(trans_reloj_t_amb):
+        index_t_amb = i
+for i,j in enumerate(trans_reloj_medioA):
+    if j == max(trans_reloj_medioA):
+        index_medioA = i
+for i,j in enumerate(trans_reloj_1A):
+    if j == max(trans_reloj_1A):
+        index_1A = i
+for i,j in enumerate(trans_reloj_2A):
+    if j == max(trans_reloj_2A):
+        index_2A = i
+for i,j in enumerate(trans_reloj_3A):
+    if j == max(trans_reloj_3A):
+        index_3A = i
+
+w_s_resistencia = f_reloj_resistencia[index_resistencia]
+w_s_1A_caliente = f_reloj_1A_caliente[index_1A_caliente]
+w_s_medioA_caliente = f_reloj_medioA_caliente[index_medioA_caliente]
+w_s_t_amb = f_reloj_t_amb[index_t_amb]
+w_s_medioA = f_reloj_medioA[index_medioA]
+w_s_1A = f_reloj_1A[index_1A]
+w_s_2A = f_reloj_2A[index_2A]
+w_s_3A = f_reloj_3A[index_3A]
+
+resonancias = [w_s_resistencia, w_s_1A_caliente, w_s_medioA_caliente, w_s_t_amb, w_s_medioA, w_s_1A, w_s_2A, w_s_3A]
+temperaturas = [85.91, 60.46, 45.27, 30.12, 19.88, 15.39, 10.97, 7.09]
+
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(temperaturas, resonancias, 'o')
+plt.xlabel('Temperatura (°C)')
+plt.ylabel('Frecuencia (Hz)')
+plt.grid(True)
+plt.show()
