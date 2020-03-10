@@ -425,6 +425,62 @@ L_3A = (Q_3A*R_3A)/(w_s_3A*T_3A)
 C_3A = 1/(L_3A*w_s_3A**2)
 
 #%% Ajustes
+f_reloj_t_amb = datos_reloj_t_amb.iloc[40:70,0]
+v_out_reloj_t_amb = datos_reloj_t_amb.iloc[40:70,1]
+phi_reloj_t_amb = datos_reloj_t_amb.iloc[40:70,2]
+v_in_reloj_t_amb = np.zeros(len(v_out_reloj_t_amb))
+for i in range(len(v_in_reloj_t_amb)):
+    v_in_reloj_t_amb[i] = 0.5/np.sqrt(2)
+trans_reloj_t_amb = v_out_reloj_t_amb/v_in_reloj_t_amb
+
+f_reloj_medioA = datos_reloj_medioA.iloc[45:75,0]
+v_out_reloj_medioA = datos_reloj_medioA.iloc[45:75,1]
+phi_reloj_medioA = datos_reloj_medioA.iloc[45:75,2]
+v_in_reloj_medioA = np.zeros(len(v_out_reloj_medioA))
+for i in range(len(v_in_reloj_medioA)):
+    v_in_reloj_medioA[i] = 0.5/np.sqrt(2)
+trans_reloj_medioA = v_out_reloj_medioA/v_in_reloj_medioA
+
+f_reloj_1A = datos_reloj_1A.iloc[45:73,0]
+v_out_reloj_1A = datos_reloj_1A.iloc[45:73,1]
+phi_reloj_1A = datos_reloj_1A.iloc[45:73,2]
+v_in_reloj_1A = np.zeros(len(v_out_reloj_1A))
+for i in range(len(v_in_reloj_1A)):
+    v_in_reloj_1A[i] = 0.5/np.sqrt(2)
+trans_reloj_1A = v_out_reloj_1A/v_in_reloj_1A
+
+f_reloj_2A = datos_reloj_2A.iloc[45:75,0]
+v_out_reloj_2A = datos_reloj_2A.iloc[45:75,1]
+phi_reloj_2A = datos_reloj_2A.iloc[45:75,2]
+v_in_reloj_2A = np.zeros(len(v_out_reloj_2A))
+for i in range(len(v_in_reloj_2A)):
+    v_in_reloj_2A[i] = 0.5/np.sqrt(2)
+trans_reloj_2A = v_out_reloj_2A/v_in_reloj_2A
+
+f_reloj_3A = datos_reloj_3A.iloc[45:75,0]
+v_out_reloj_3A = datos_reloj_3A.iloc[45:75,1]
+phi_reloj_3A = datos_reloj_3A.iloc[45:75,2]
+v_in_reloj_3A = np.zeros(len(v_out_reloj_3A))
+for i in range(len(v_in_reloj_3A)):
+    v_in_reloj_3A[i] = 0.5/np.sqrt(2)
+trans_reloj_3A = v_out_reloj_3A/v_in_reloj_3A
+
+f_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[45:75,0]
+v_out_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[45:75,1]
+phi_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[45:75,2]
+v_in_reloj_medioA_caliente = np.zeros(len(v_out_reloj_medioA_caliente))
+for i in range(len(v_in_reloj_medioA_caliente)):
+    v_in_reloj_medioA_caliente[i] = 0.5/np.sqrt(2)
+trans_reloj_medioA_caliente = v_out_reloj_medioA_caliente/v_in_reloj_medioA_caliente
+
+f_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[44:74,0]
+v_out_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[44:74,1]
+phi_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[44:74,2]
+v_in_reloj_1A_caliente = np.zeros(len(v_out_reloj_1A_caliente))
+for i in range(len(v_in_reloj_1A_caliente)):
+    v_in_reloj_1A_caliente[i] = 0.5/np.sqrt(2)
+trans_reloj_1A_caliente = v_out_reloj_1A_caliente/v_in_reloj_1A_caliente
+
 frecuencias = [f_reloj_1A_caliente, f_reloj_medioA_caliente, f_reloj_t_amb, f_reloj_medioA, f_reloj_1A, f_reloj_2A, f_reloj_3A]
 transferencias = [trans_reloj_1A_caliente, trans_reloj_medioA_caliente, trans_reloj_t_amb, trans_reloj_medioA, trans_reloj_1A, trans_reloj_2A, trans_reloj_3A]
 Qs = [Q_1A_caliente, Q_medioA_caliente, Q_t_amb, Q_medioA, Q_1A, Q_2A, Q_3A]
