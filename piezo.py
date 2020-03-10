@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 from matplotlib.pyplot import figure
 from scipy.optimize import curve_fit
 #from scipy import special
-
+plt.rcParams.update({'font.size': 15})
 #%% Osciloscopio
 data_res = pd.read_csv('Resonancia.csv')
 
@@ -213,9 +213,9 @@ datos_reloj_t_amb = pd.read_csv('reso piezo reloj', header=None)
 datos_reloj_t_amb = datos_reloj_t_amb.transpose()
 datos_reloj_t_amb.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_reloj_t_amb = datos_reloj_t_amb.iloc[:,0]
-v_out_reloj_t_amb = datos_reloj_t_amb.iloc[:,1]
-phi_reloj_t_amb = datos_reloj_t_amb.iloc[:,2]
+f_reloj_t_amb = datos_reloj_t_amb.iloc[3:120,0]
+v_out_reloj_t_amb = datos_reloj_t_amb.iloc[3:120,1]
+phi_reloj_t_amb = datos_reloj_t_amb.iloc[3:120,2]
 v_in_reloj_t_amb = np.zeros(len(v_out_reloj_t_amb))
 for i in range(len(v_in_reloj_t_amb)):
     v_in_reloj_t_amb[i] = 0.5/np.sqrt(2)
@@ -225,9 +225,9 @@ datos_reloj_medioA = pd.read_csv('campana resonancia peltier 0,5A', header=None)
 datos_reloj_medioA = datos_reloj_medioA.transpose()
 datos_reloj_medioA.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_reloj_medioA = datos_reloj_medioA.iloc[:,0]
-v_out_reloj_medioA = datos_reloj_medioA.iloc[:,1]
-phi_reloj_medioA = datos_reloj_medioA.iloc[:,2]
+f_reloj_medioA = datos_reloj_medioA.iloc[3:120,0]
+v_out_reloj_medioA = datos_reloj_medioA.iloc[3:120,1]
+phi_reloj_medioA = datos_reloj_medioA.iloc[3:120,2]
 v_in_reloj_medioA = np.zeros(len(v_out_reloj_medioA))
 for i in range(len(v_in_reloj_medioA)):
     v_in_reloj_medioA[i] = 0.5/np.sqrt(2)
@@ -237,9 +237,9 @@ datos_reloj_1A = pd.read_csv('campana resonancia peltier 1A', header=None)
 datos_reloj_1A = datos_reloj_1A.transpose()
 datos_reloj_1A.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_reloj_1A = datos_reloj_1A.iloc[:,0]
-v_out_reloj_1A = datos_reloj_1A.iloc[:,1]
-phi_reloj_1A = datos_reloj_1A.iloc[:,2]
+f_reloj_1A = datos_reloj_1A.iloc[3:120,0]
+v_out_reloj_1A = datos_reloj_1A.iloc[3:120,1]
+phi_reloj_1A = datos_reloj_1A.iloc[3:120,2]
 v_in_reloj_1A = np.zeros(len(v_out_reloj_1A))
 for i in range(len(v_in_reloj_1A)):
     v_in_reloj_1A[i] = 0.5/np.sqrt(2)
@@ -249,9 +249,9 @@ datos_reloj_2A = pd.read_csv('campana resonancia peltier 2A', header=None)
 datos_reloj_2A = datos_reloj_2A.transpose()
 datos_reloj_2A.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_reloj_2A = datos_reloj_2A.iloc[:,0]
-v_out_reloj_2A = datos_reloj_2A.iloc[:,1]
-phi_reloj_2A = datos_reloj_2A.iloc[:,2]
+f_reloj_2A = datos_reloj_2A.iloc[3:120,0]
+v_out_reloj_2A = datos_reloj_2A.iloc[3:120,1]
+phi_reloj_2A = datos_reloj_2A.iloc[3:120,2]
 v_in_reloj_2A = np.zeros(len(v_out_reloj_2A))
 for i in range(len(v_in_reloj_2A)):
     v_in_reloj_2A[i] = 0.5/np.sqrt(2)
@@ -261,9 +261,9 @@ datos_reloj_3A = pd.read_csv('campana resonancia peltier 3A', header=None)
 datos_reloj_3A = datos_reloj_3A.transpose()
 datos_reloj_3A.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_reloj_3A = datos_reloj_3A.iloc[:,0]
-v_out_reloj_3A = datos_reloj_3A.iloc[:,1]
-phi_reloj_3A = datos_reloj_3A.iloc[:,2]
+f_reloj_3A = datos_reloj_3A.iloc[3:120,0]
+v_out_reloj_3A = datos_reloj_3A.iloc[3:120,1]
+phi_reloj_3A = datos_reloj_3A.iloc[3:120,2]
 v_in_reloj_3A = np.zeros(len(v_out_reloj_3A))
 for i in range(len(v_in_reloj_3A)):
     v_in_reloj_3A[i] = 0.5/np.sqrt(2)
@@ -273,9 +273,9 @@ datos_reloj_medioA_caliente = pd.read_csv('campana resonancia peltier caliente 0
 datos_reloj_medioA_caliente = datos_reloj_medioA_caliente.transpose()
 datos_reloj_medioA_caliente.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[:,0]
-v_out_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[:,1]
-phi_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[:,2]
+f_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[3:120,0]
+v_out_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[3:120,1]
+phi_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[3:120,2]
 v_in_reloj_medioA_caliente = np.zeros(len(v_out_reloj_medioA_caliente))
 for i in range(len(v_in_reloj_medioA_caliente)):
     v_in_reloj_medioA_caliente[i] = 0.5/np.sqrt(2)
@@ -285,9 +285,9 @@ datos_reloj_1A_caliente = pd.read_csv('campana resonancia peltier caliente 1A', 
 datos_reloj_1A_caliente = datos_reloj_1A_caliente.transpose()
 datos_reloj_1A_caliente.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[:,0]
-v_out_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[:,1]
-phi_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[:,2]
+f_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[3:120,0]
+v_out_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[3:120,1]
+phi_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[3:120,2]
 v_in_reloj_1A_caliente = np.zeros(len(v_out_reloj_1A_caliente))
 for i in range(len(v_in_reloj_1A_caliente)):
     v_in_reloj_1A_caliente[i] = 0.5/np.sqrt(2)
@@ -297,30 +297,30 @@ datos_reloj_resistencia = pd.read_csv('campana calentado con resistencia', heade
 datos_reloj_resistencia = datos_reloj_resistencia.transpose()
 datos_reloj_resistencia.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_reloj_resistencia = datos_reloj_resistencia.iloc[:,0]
-v_out_reloj_resistencia = datos_reloj_resistencia.iloc[:,1]
-phi_reloj_resistencia = datos_reloj_resistencia.iloc[:,2]
+f_reloj_resistencia = datos_reloj_resistencia.iloc[3:120,0]
+v_out_reloj_resistencia = datos_reloj_resistencia.iloc[3:120,1]
+phi_reloj_resistencia = datos_reloj_resistencia.iloc[3:120,2]
 v_in_reloj_resistencia = np.zeros(len(v_out_reloj_resistencia))
 for i in range(len(v_in_reloj_resistencia)):
     v_in_reloj_resistencia[i] = 0.5/np.sqrt(2)
 trans_reloj_resistencia = v_out_reloj_resistencia/v_in_reloj_resistencia
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(f_reloj_resistencia, trans_reloj_resistencia, '.', label='85,91°C')
-plt.plot(f_reloj_1A_caliente, trans_reloj_1A_caliente, '.', label='60,46°C')
-plt.plot(f_reloj_medioA_caliente, trans_reloj_medioA_caliente, '.', label='45,27°C')
-plt.plot(f_reloj_t_amb, trans_reloj_t_amb, '.', label='30,12°C')
-plt.plot(f_reloj_medioA, trans_reloj_medioA, '.', label='19,88°C')
-plt.plot(f_reloj_1A, trans_reloj_1A, '.', label='15,39°C')
-plt.plot(f_reloj_2A, trans_reloj_2A, '.', label='10,97°C')
-plt.plot(f_reloj_3A, trans_reloj_3A, '.', label='7,09°C')
+#plt.plot(f_reloj_resistencia, trans_reloj_resistencia, '.', label='85,91°C')
+plt.plot(f_reloj_1A_caliente, trans_reloj_1A_caliente, label='60,46°C')
+plt.plot(f_reloj_medioA_caliente, trans_reloj_medioA_caliente, label='45,27°C')
+plt.plot(f_reloj_t_amb, trans_reloj_t_amb, label='30,12°C')
+plt.plot(f_reloj_medioA, trans_reloj_medioA, label='19,88°C')
+plt.plot(f_reloj_1A, trans_reloj_1A, label='15,39°C')
+plt.plot(f_reloj_2A, trans_reloj_2A, label='10,97°C')
+plt.plot(f_reloj_3A, trans_reloj_3A, label='7,09°C')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Tranferencia')
 plt.grid(True)
 plt.legend()
-plt.show()
 
-#%%
+
+#%% Resonancias
 for i,j in enumerate(trans_reloj_resistencia):
     if j == max(trans_reloj_resistencia):
         index_resistencia = i
@@ -346,14 +346,14 @@ for i,j in enumerate(trans_reloj_3A):
     if j == max(trans_reloj_3A):
         index_3A = i
 
-w_s_resistencia = f_reloj_resistencia[index_resistencia]
-w_s_1A_caliente = f_reloj_1A_caliente[index_1A_caliente]
-w_s_medioA_caliente = f_reloj_medioA_caliente[index_medioA_caliente]
-w_s_t_amb = f_reloj_t_amb[index_t_amb]
-w_s_medioA = f_reloj_medioA[index_medioA]
-w_s_1A = f_reloj_1A[index_1A]
-w_s_2A = f_reloj_2A[index_2A]
-w_s_3A = f_reloj_3A[index_3A]
+w_s_resistencia = f_reloj_resistencia[index_resistencia]*2*np.pi
+w_s_1A_caliente = f_reloj_1A_caliente[index_1A_caliente]*2*np.pi
+w_s_medioA_caliente = f_reloj_medioA_caliente[index_medioA_caliente]*2*np.pi
+w_s_t_amb = f_reloj_t_amb[index_t_amb]*2*np.pi
+w_s_medioA = f_reloj_medioA[index_medioA]*2*np.pi
+w_s_1A = f_reloj_1A[index_1A]*2*np.pi
+w_s_2A = f_reloj_2A[index_2A]*2*np.pi
+w_s_3A = f_reloj_3A[index_3A]*2*np.pi
 
 resonancias = [w_s_resistencia, w_s_1A_caliente, w_s_medioA_caliente, w_s_t_amb, w_s_medioA, w_s_1A, w_s_2A, w_s_3A]
 temperaturas = [85.91, 60.46, 45.27, 30.12, 19.88, 15.39, 10.97, 7.09]
@@ -364,3 +364,82 @@ plt.xlabel('Temperatura (°C)')
 plt.ylabel('Frecuencia (Hz)')
 plt.grid(True)
 plt.show()
+
+#%% Parametros
+R_2 = 30000
+
+w_m_1A_caliente = f_reloj_1A_caliente[47]*2*np.pi
+w_p_1A_caliente = f_reloj_1A_caliente[65]*2*np.pi
+T_1A_caliente = max(trans_reloj_1A_caliente)
+Q_1A_caliente = w_s_1A_caliente/(w_p_1A_caliente - w_m_1A_caliente)
+R_1A_caliente = (R_2/T_1A_caliente) - R_2
+L_1A_caliente = (Q_1A_caliente*R_1A_caliente)/(w_s_1A_caliente*T_1A_caliente)
+C_1A_caliente = 1/(L_1A_caliente*w_s_1A_caliente**2)
+
+w_m_medioA_caliente = f_reloj_medioA_caliente[48]*2*np.pi
+w_p_medioA_caliente = f_reloj_medioA_caliente[65]*2*np.pi
+T_medioA_caliente = max(trans_reloj_medioA_caliente)
+Q_medioA_caliente = w_s_medioA_caliente/(w_p_medioA_caliente - w_m_medioA_caliente)
+R_medioA_caliente = (R_2/T_medioA_caliente) - R_2
+L_medioA_caliente = (Q_medioA_caliente*R_medioA_caliente)/(w_s_medioA_caliente*T_medioA_caliente)
+C_medioA_caliente = 1/(L_medioA_caliente*w_s_medioA_caliente**2)
+
+w_m_t_amb = f_reloj_t_amb[44]*2*np.pi
+w_p_t_amb = f_reloj_t_amb[60]*2*np.pi
+T_t_amb = max(trans_reloj_t_amb)
+Q_t_amb = w_s_t_amb/(w_p_t_amb - w_m_t_amb)
+R_t_amb = (R_2/T_t_amb) - R_2
+L_t_amb = (Q_t_amb*R_t_amb)/(w_s_t_amb*T_t_amb)
+C_t_amb = 1/(L_t_amb*w_s_t_amb**2)
+
+w_m_medioA = f_reloj_medioA[48]*2*np.pi
+w_p_medioA = f_reloj_medioA[67]*2*np.pi
+T_medioA = max(trans_reloj_medioA)
+Q_medioA = w_s_medioA/(w_p_medioA - w_m_medioA)
+R_medioA = (R_2/T_medioA) - R_2
+L_medioA = (Q_medioA*R_medioA)/(w_s_medioA*T_medioA)
+C_medioA = 1/(L_medioA*w_s_medioA**2)
+
+w_m_1A = f_reloj_1A[46]*2*np.pi
+w_p_1A = f_reloj_1A[65]*2*np.pi
+T_1A = max(trans_reloj_1A)
+Q_1A = w_s_1A/(w_p_1A - w_m_1A)
+R_1A = (R_2/T_1A) - R_2
+L_1A = (Q_1A*R_1A)/(w_s_1A*T_1A)
+C_1A = 1/(L_1A*w_s_1A**2)
+
+w_m_2A = f_reloj_2A[47]*2*np.pi
+w_p_2A = f_reloj_2A[65]*2*np.pi
+T_2A = max(trans_reloj_2A)
+Q_2A = w_s_2A/(w_p_2A - w_m_2A)
+R_2A = (R_2/T_2A) - R_2
+L_2A = (Q_2A*R_2A)/(w_s_2A*T_2A)
+C_2A = 1/(L_2A*w_s_2A**2)
+
+w_m_3A = f_reloj_3A[51]*2*np.pi
+w_p_3A = f_reloj_3A[66]*2*np.pi
+T_3A = max(trans_reloj_3A)
+Q_3A = w_s_3A/(w_p_3A - w_m_3A)
+R_3A = (R_2/T_3A) - R_2
+L_3A = (Q_3A*R_3A)/(w_s_3A*T_3A)
+C_3A = 1/(L_3A*w_s_3A**2)
+
+#%% Ajustes
+frecuencias = [f_reloj_1A_caliente, f_reloj_medioA_caliente, f_reloj_t_amb, f_reloj_medioA, f_reloj_1A, f_reloj_2A, f_reloj_3A]
+transferencias = [trans_reloj_1A_caliente, trans_reloj_medioA_caliente, trans_reloj_t_amb, trans_reloj_medioA, trans_reloj_1A, trans_reloj_2A, trans_reloj_3A]
+Qs = [Q_1A_caliente, Q_medioA_caliente, Q_t_amb, Q_medioA, Q_1A, Q_2A, Q_3A]
+Ts = [T_1A_caliente, T_medioA_caliente, T_t_amb, T_medioA, T_1A, T_2A, T_3A]
+params = []
+cov = []
+
+for i in range(7):
+    params_i, cov_i = curve_fit(func_trans_res_v2, frecuencias[i], transferencias[i], [Ts[i], resonancias[i], Qs[i]])
+    params.append(params_i)
+    cov.append(cov_i)
+    figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+    plt.plot(frecuencias[i], transferencias[i], '.')
+    plt.plot(frecuencias[i], func_trans_res_v2(frecuencias[i], params_i[0], params_i[1], params_i[2]))
+    plt.xlabel('Frecuencia (Hz)')
+    plt.ylabel('Transferencia')
+    plt.grid(True)
+    plt.show()
