@@ -138,6 +138,8 @@ plt.show()
 camp_res = pd.read_csv('Campana resonancia fina(1)', header=None)
 camp_res = camp_res.transpose()
 camp_res.columns = ['Frecuencia', 'V_out', 'Fase']
+err_res = pd.read_csv('Erores_resonancia_fina.csv', header=None)
+err_res.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 f = camp_res.iloc[:,0].to_numpy()
 v_out = camp_res.iloc[:,2].to_numpy()
 phi = camp_res.iloc[:,1].to_numpy()
@@ -156,13 +158,13 @@ R_0_2 = (R_2_2/T_0_2) - R_2_2
 L_0_2 = (Q_0_2*R_2_2)/(w_s_0_2*T_0_2)
 C_0_2 = 1/(L_0_2*w_s_0_2**2)
 
-params_4, cov_4 = curve_fit(func_trans_res_v2, f, Trans, [T_0, w_s_0, Q_0])
+params_4, cov_4 = curve_fit(func_trans_res_v2, f, Trans, [T_0, w_s_0, Q_0], sigma=err_res.iloc[:,2], absolute_sigma=True)
 print('Parametros: ', params_4)
 print('Estimaciones: ', T_0, w_s_0, Q_0)
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(f, Trans, '.', label='T(f)')
-plt.plot(f, func_trans_res_v2(f, params_4[0], params_4[1], params_4[2]), label='Ajuste')
+plt.errorbar(f, Trans, err_res.iloc[:,2], err_res.iloc[:,0], '.', ecolor='r', errorevery=500, label='T(f)')
+plt.plot(f, func_trans_res_v2(f, params_4[0], params_4[1], params_4[2]), 'g', label='Ajuste')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Transferencia')
 plt.grid(True)
@@ -213,6 +215,9 @@ datos_reloj_t_amb = pd.read_csv('reso piezo reloj', header=None)
 datos_reloj_t_amb = datos_reloj_t_amb.transpose()
 datos_reloj_t_amb.columns = ['Frecuencia', 'V_out', 'Fase']
 
+err_t_amb = pd.read_csv('Errores_relojTA.csv', header=None)
+err_t_amb.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
+
 f_reloj_t_amb = datos_reloj_t_amb.iloc[3:120,0]
 v_out_reloj_t_amb = datos_reloj_t_amb.iloc[3:120,1]
 phi_reloj_t_amb = datos_reloj_t_amb.iloc[3:120,2]
@@ -224,6 +229,9 @@ trans_reloj_t_amb = v_out_reloj_t_amb/v_in_reloj_t_amb
 datos_reloj_medioA = pd.read_csv('campana resonancia peltier 0,5A', header=None)
 datos_reloj_medioA = datos_reloj_medioA.transpose()
 datos_reloj_medioA.columns = ['Frecuencia', 'V_out', 'Fase']
+
+err_medioA = pd.read_csv('Errores_reloj_medio_frio.csv', header=None)
+err_medioA.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_medioA = datos_reloj_medioA.iloc[3:120,0]
 v_out_reloj_medioA = datos_reloj_medioA.iloc[3:120,1]
@@ -237,6 +245,9 @@ datos_reloj_1A = pd.read_csv('campana resonancia peltier 1A', header=None)
 datos_reloj_1A = datos_reloj_1A.transpose()
 datos_reloj_1A.columns = ['Frecuencia', 'V_out', 'Fase']
 
+err_1A = pd.read_csv('Errores_reloj_1_frio.csv', header=None)
+err_1A.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
+
 f_reloj_1A = datos_reloj_1A.iloc[3:120,0]
 v_out_reloj_1A = datos_reloj_1A.iloc[3:120,1]
 phi_reloj_1A = datos_reloj_1A.iloc[3:120,2]
@@ -248,6 +259,9 @@ trans_reloj_1A = v_out_reloj_1A/v_in_reloj_1A
 datos_reloj_2A = pd.read_csv('campana resonancia peltier 2A', header=None)
 datos_reloj_2A = datos_reloj_2A.transpose()
 datos_reloj_2A.columns = ['Frecuencia', 'V_out', 'Fase']
+
+err_2A = pd.read_csv('Errores_reloj_2_frio.csv', header=None)
+err_2A.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_2A = datos_reloj_2A.iloc[3:120,0]
 v_out_reloj_2A = datos_reloj_2A.iloc[3:120,1]
@@ -261,6 +275,9 @@ datos_reloj_3A = pd.read_csv('campana resonancia peltier 3A', header=None)
 datos_reloj_3A = datos_reloj_3A.transpose()
 datos_reloj_3A.columns = ['Frecuencia', 'V_out', 'Fase']
 
+err_3A = pd.read_csv('Errores_reloj_3_frio.csv', header=None)
+err_3A.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
+
 f_reloj_3A = datos_reloj_3A.iloc[3:120,0]
 v_out_reloj_3A = datos_reloj_3A.iloc[3:120,1]
 phi_reloj_3A = datos_reloj_3A.iloc[3:120,2]
@@ -272,6 +289,9 @@ trans_reloj_3A = v_out_reloj_3A/v_in_reloj_3A
 datos_reloj_medioA_caliente = pd.read_csv('campana resonancia peltier caliente 0,5A', header=None)
 datos_reloj_medioA_caliente = datos_reloj_medioA_caliente.transpose()
 datos_reloj_medioA_caliente.columns = ['Frecuencia', 'V_out', 'Fase']
+
+err_medioA_caliente = pd.read_csv('Errores_reloj_medio_caliente.csv', header=None)
+err_medioA_caliente.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[3:120,0]
 v_out_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[3:120,1]
@@ -285,6 +305,9 @@ datos_reloj_1A_caliente = pd.read_csv('campana resonancia peltier caliente 1A', 
 datos_reloj_1A_caliente = datos_reloj_1A_caliente.transpose()
 datos_reloj_1A_caliente.columns = ['Frecuencia', 'V_out', 'Fase']
 
+err_1A_caliente = pd.read_csv('Errores_reloj_1_caliente.csv', header=None)
+err_1A_caliente.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
+
 f_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[3:120,0]
 v_out_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[3:120,1]
 phi_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[3:120,2]
@@ -293,27 +316,27 @@ for i in range(len(v_in_reloj_1A_caliente)):
     v_in_reloj_1A_caliente[i] = 0.5/np.sqrt(2)
 trans_reloj_1A_caliente = v_out_reloj_1A_caliente/v_in_reloj_1A_caliente
 
-datos_reloj_resistencia = pd.read_csv('campana calentado con resistencia', header=None)
-datos_reloj_resistencia = datos_reloj_resistencia.transpose()
-datos_reloj_resistencia.columns = ['Frecuencia', 'V_out', 'Fase']
+#datos_reloj_resistencia = pd.read_csv('campana calentado con resistencia', header=None)
+#datos_reloj_resistencia = datos_reloj_resistencia.transpose()
+#datos_reloj_resistencia.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_reloj_resistencia = datos_reloj_resistencia.iloc[3:120,0]
-v_out_reloj_resistencia = datos_reloj_resistencia.iloc[3:120,1]
-phi_reloj_resistencia = datos_reloj_resistencia.iloc[3:120,2]
-v_in_reloj_resistencia = np.zeros(len(v_out_reloj_resistencia))
-for i in range(len(v_in_reloj_resistencia)):
-    v_in_reloj_resistencia[i] = 0.5/np.sqrt(2)
-trans_reloj_resistencia = v_out_reloj_resistencia/v_in_reloj_resistencia
+#f_reloj_resistencia = datos_reloj_resistencia.iloc[3:120,0]
+#v_out_reloj_resistencia = datos_reloj_resistencia.iloc[3:120,1]
+#phi_reloj_resistencia = datos_reloj_resistencia.iloc[3:120,2]
+#v_in_reloj_resistencia = np.zeros(len(v_out_reloj_resistencia))
+#for i in range(len(v_in_reloj_resistencia)):
+#    v_in_reloj_resistencia[i] = 0.5/np.sqrt(2)
+#trans_reloj_resistencia = v_out_reloj_resistencia/v_in_reloj_resistencia
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 #plt.plot(f_reloj_resistencia, trans_reloj_resistencia, '.', label='85,91°C')
-plt.plot(f_reloj_1A_caliente, trans_reloj_1A_caliente, label='60,46°C')
-plt.plot(f_reloj_medioA_caliente, trans_reloj_medioA_caliente, label='45,27°C')
-plt.plot(f_reloj_t_amb, trans_reloj_t_amb, label='30,12°C')
-plt.plot(f_reloj_medioA, trans_reloj_medioA, label='19,88°C')
-plt.plot(f_reloj_1A, trans_reloj_1A, label='15,39°C')
-plt.plot(f_reloj_2A, trans_reloj_2A, label='10,97°C')
-plt.plot(f_reloj_3A, trans_reloj_3A, label='7,09°C')
+plt.errorbar(f_reloj_1A_caliente, trans_reloj_1A_caliente, err_1A_caliente.iloc[3:120,2], err_1A_caliente.iloc[3:120,0], errorevery=5, label='60,46°C')
+plt.errorbar(f_reloj_medioA_caliente, trans_reloj_medioA_caliente, err_medioA_caliente.iloc[3:120,2], err_medioA_caliente.iloc[3:120,0], errorevery=5, label='45,27°C')
+plt.errorbar(f_reloj_t_amb, trans_reloj_t_amb, err_t_amb.iloc[3:120,2], err_t_amb.iloc[3:120,0], errorevery=5, label='30,12°C')
+plt.errorbar(f_reloj_medioA, trans_reloj_medioA, err_medioA.iloc[3:120,2], err_medioA.iloc[3:120,0], errorevery=5, label='19,88°C')
+plt.errorbar(f_reloj_1A, trans_reloj_1A, err_1A.iloc[3:120,2], err_1A.iloc[3:120,0], errorevery=5, label='15,39°C')
+plt.errorbar(f_reloj_2A, trans_reloj_2A, err_2A.iloc[3:120,2], err_2A.iloc[3:120,0], errorevery=5, label='10,97°C')
+plt.errorbar(f_reloj_3A, trans_reloj_3A, err_3A.iloc[3:120,2], err_3A.iloc[3:120,0], errorevery=5, label='7,09°C')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Tranferencia')
 plt.grid(True)
@@ -321,9 +344,9 @@ plt.legend()
 
 
 #%% Resonancias
-for i,j in enumerate(trans_reloj_resistencia):
-    if j == max(trans_reloj_resistencia):
-        index_resistencia = i
+#for i,j in enumerate(trans_reloj_resistencia):
+#    if j == max(trans_reloj_resistencia):
+#        index_resistencia = i
 for i,j in enumerate(trans_reloj_1A_caliente):
     if j == max(trans_reloj_1A_caliente):
         index_1A_caliente = i
@@ -346,7 +369,7 @@ for i,j in enumerate(trans_reloj_3A):
     if j == max(trans_reloj_3A):
         index_3A = i
 
-w_s_resistencia = f_reloj_resistencia[index_resistencia]*2*np.pi
+#w_s_resistencia = f_reloj_resistencia[index_resistencia]*2*np.pi
 w_s_1A_caliente = f_reloj_1A_caliente[index_1A_caliente]*2*np.pi
 w_s_medioA_caliente = f_reloj_medioA_caliente[index_medioA_caliente]*2*np.pi
 w_s_t_amb = f_reloj_t_amb[index_t_amb]*2*np.pi
@@ -355,14 +378,15 @@ w_s_1A = f_reloj_1A[index_1A]*2*np.pi
 w_s_2A = f_reloj_2A[index_2A]*2*np.pi
 w_s_3A = f_reloj_3A[index_3A]*2*np.pi
 
-resonancias = [w_s_resistencia, w_s_1A_caliente, w_s_medioA_caliente, w_s_t_amb, w_s_medioA, w_s_1A, w_s_2A, w_s_3A]
-temperaturas = [85.91, 60.46, 45.27, 30.12, 19.88, 15.39, 10.97, 7.09]
+resonancias = [w_s_1A_caliente, w_s_medioA_caliente, w_s_t_amb, w_s_medioA, w_s_1A, w_s_2A, w_s_3A]
+temperaturas = [60.46, 45.27, 30.12, 19.88, 15.39, 10.97, 7.09]
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.plot(temperaturas, resonancias, 'o')
+plt.errorbar(temperaturas, resonancias, [0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001], None, '.', label='w_s(T)')
 plt.xlabel('Temperatura (°C)')
 plt.ylabel('Frecuencia (Hz)')
 plt.grid(True)
+plt.legend()
 plt.show()
 
 #%% Parametros
@@ -485,6 +509,9 @@ frecuencias = [f_reloj_1A_caliente, f_reloj_medioA_caliente, f_reloj_t_amb, f_re
 transferencias = [trans_reloj_1A_caliente, trans_reloj_medioA_caliente, trans_reloj_t_amb, trans_reloj_medioA, trans_reloj_1A, trans_reloj_2A, trans_reloj_3A]
 Qs = [Q_1A_caliente, Q_medioA_caliente, Q_t_amb, Q_medioA, Q_1A, Q_2A, Q_3A]
 Ts = [T_1A_caliente, T_medioA_caliente, T_t_amb, T_medioA, T_1A, T_2A, T_3A]
+err_frecs = [err_1A_caliente.iloc[45:75,0], err_medioA_caliente.iloc[44:74,0], err_t_amb.iloc[40:70,0], err_medioA.iloc[45:75,0], err_1A.iloc[45:73,0], err_2A.iloc[45:75,0], err_3A.iloc[45:75,0]]
+err_trans = [err_1A_caliente.iloc[45:75,2], err_medioA_caliente.iloc[44:74,2], err_t_amb.iloc[40:70,2], err_medioA.iloc[45:75,2], err_1A.iloc[45:73,2], err_2A.iloc[45:75,2], err_3A.iloc[45:75,2]]
+params = []
 params = []
 cov = []
 
@@ -493,7 +520,7 @@ for i in range(7):
     params.append(params_i)
     cov.append(cov_i)
     figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-    plt.plot(frecuencias[i], transferencias[i], '.')
+    plt.errorbar(frecuencias[i], transferencias[i], err_trans[i], err_frecs[i],  '.')
     plt.plot(frecuencias[i], func_trans_res_v2(frecuencias[i], params_i[0], params_i[1], params_i[2]))
     plt.xlabel('Frecuencia (Hz)')
     plt.ylabel('Transferencia')
