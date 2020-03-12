@@ -158,9 +158,9 @@ R_0_2 = (R_2_2/T_0_2) - R_2_2
 L_0_2 = (Q_0_2*R_2_2)/(w_s_0_2*T_0_2)
 C_0_2 = 1/(L_0_2*w_s_0_2**2)
 
-params_4, cov_4 = curve_fit(func_trans_res_v2, f, Trans, [T_0, w_s_0, Q_0], sigma=err_res.iloc[:,2], absolute_sigma=True)
+params_4, cov_4 = curve_fit(func_trans_res_v2, f, Trans, [T_0_2, w_s_0_2, Q_0_2], sigma=err_res.iloc[:,2], absolute_sigma=True)
 print('Parametros: ', params_4)
-print('Estimaciones: ', T_0, w_s_0, Q_0)
+print('Estimaciones: ', T_0_2, w_s_0_2, Q_0_2)
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.errorbar(f, Trans, err_res.iloc[:,2], err_res.iloc[:,0], '.', ecolor='r', errorevery=500, label='T(f)')
@@ -176,17 +176,29 @@ camp_anti = pd.read_csv('ANTI FINA', header=None)
 camp_anti = camp_anti.transpose()
 camp_anti.columns = ['Frecuencia', 'V_out', 'Fase']
 
-f_anti_fina = camp_anti.iloc[:,0]
-v_out_anti_fina = camp_anti.iloc[:,1]
-phi_anti_fina = camp_anti.iloc[:,2]
+f_anti_fina = camp_anti.iloc[:,0].to_numpy()
+v_out_anti_fina = camp_anti.iloc[:,1].to_numpy()
+phi_anti_fina = camp_anti.iloc[:,2].to_numpy()
 v_in_anti_fina = np.zeros(len(v_out_anti_fina))
 for i in range(len(v_out_anti_fina)):
     v_in_anti_fina[i] = 1/np.sqrt(2)
 Trans_anti_fina = v_out_anti_fina/v_in_anti_fina
 
+err_anti = pd.read_csv('Errores_antiresonancia.csv', header=None)
+err_anti.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
+
+L_calculada = (params_4[2]*R_2_2)/(params_4[1]*params_4[0])
+C_calculada = 1/(L_calculada*params_4[1]**2)
+C_2_0 = 1/((2*np.pi*f_anti_fina[2116]**2)*L_calculada - (1/C_calculada))
+
+def func_trans_anti(f_a, C_2):
+    return R_2_2/(R_2_2 + (2*np.pi*f_a*L_calculada - 1/(2*np.pi*f_a*C_calculada))/(1 - 2*np.pi*f_a*C_2*(2*np.pi*f_a*L_calculada - 1/(2*np.pi*f_a*C_calculada))))
+
+params_5, cov_5 = curve_fit(func_trans_anti, f_anti_fina, Trans_anti_fina, [C_2_0], sigma=err_anti.iloc[:,2], absolute_sigma=True)
+
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(f_anti_fina, Trans_anti_fina, '.', label='T(f)')
-#plt.plot(f, func_trans_res_v2(f, params_4[0], params_4[1], params_4[2]), label='Ajuste')
+#plt.plot(f_anti_fina, func_trans_anti(f_anti_fina, params_5), label='Ajuste')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Transferencia')
 plt.grid(True)
@@ -209,6 +221,18 @@ plt.ylabel('V_in (V)')
 plt.grid(True)
 plt.xlim(50095.75, 50098.25)
 plt.show()
+
+#%% Toda la señal
+datos_todos = pd.read_csv('piezo_lock_in_grueso.csv', header=None)
+datos_todos = datos_todos.transpose()
+datos_todos.columns = ['Frecuencia', 'V_out', 'Fase']
+
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.plot(datos_todos.iloc[:,0], datos_todos.iloc[:,1], '.')
+plt.yscale('log')
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('V_out (V)')
+plt.grid(True)
 
 #%% Reloj
 datos_reloj_t_amb = pd.read_csv('reso piezo reloj', header=None)
@@ -330,13 +354,13 @@ trans_reloj_1A_caliente = v_out_reloj_1A_caliente/v_in_reloj_1A_caliente
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 #plt.plot(f_reloj_resistencia, trans_reloj_resistencia, '.', label='85,91°C')
-plt.errorbar(f_reloj_1A_caliente, trans_reloj_1A_caliente, err_1A_caliente.iloc[3:120,2], err_1A_caliente.iloc[3:120,0], errorevery=5, label='60,46°C')
-plt.errorbar(f_reloj_medioA_caliente, trans_reloj_medioA_caliente, err_medioA_caliente.iloc[3:120,2], err_medioA_caliente.iloc[3:120,0], errorevery=5, label='45,27°C')
-plt.errorbar(f_reloj_t_amb, trans_reloj_t_amb, err_t_amb.iloc[3:120,2], err_t_amb.iloc[3:120,0], errorevery=5, label='30,12°C')
-plt.errorbar(f_reloj_medioA, trans_reloj_medioA, err_medioA.iloc[3:120,2], err_medioA.iloc[3:120,0], errorevery=5, label='19,88°C')
-plt.errorbar(f_reloj_1A, trans_reloj_1A, err_1A.iloc[3:120,2], err_1A.iloc[3:120,0], errorevery=5, label='15,39°C')
-plt.errorbar(f_reloj_2A, trans_reloj_2A, err_2A.iloc[3:120,2], err_2A.iloc[3:120,0], errorevery=5, label='10,97°C')
-plt.errorbar(f_reloj_3A, trans_reloj_3A, err_3A.iloc[3:120,2], err_3A.iloc[3:120,0], errorevery=5, label='7,09°C')
+plt.plot(f_reloj_1A_caliente, trans_reloj_1A_caliente, label='60,46°C')
+plt.plot(f_reloj_medioA_caliente, trans_reloj_medioA_caliente, label='45,27°C')
+plt.plot(f_reloj_t_amb, trans_reloj_t_amb, label='30,12°C')
+plt.plot(f_reloj_medioA, trans_reloj_medioA, label='19,88°C')
+plt.plot(f_reloj_1A, trans_reloj_1A, label='15,39°C')
+plt.plot(f_reloj_2A, trans_reloj_2A, label='10,97°C')
+plt.plot(f_reloj_3A, trans_reloj_3A, label='7,09°C')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Tranferencia')
 plt.grid(True)
@@ -526,3 +550,10 @@ for i in range(7):
     plt.ylabel('Transferencia')
     plt.grid(True)
     plt.show()
+
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.errorbar(temperaturas, Ts, [0.003, 0.003, 0.003, 0.003, 0.003, 0.003, 0.003], None, '.')
+plt.xlabel('Temperatura (°C)')
+plt.ylabel('Amplitud')
+plt.grid(True)
+plt.show()
