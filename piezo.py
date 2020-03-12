@@ -138,7 +138,7 @@ plt.show()
 camp_res = pd.read_csv('Campana resonancia fina(1)', header=None)
 camp_res = camp_res.transpose()
 camp_res.columns = ['Frecuencia', 'V_out', 'Fase']
-err_res = pd.read_csv('Erores_resonancia_fina.csv', header=None)
+err_res = pd.read_csv('Errores_resonancia_fina.csv', header=None)
 err_res.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 f = camp_res.iloc[:,0].to_numpy()
 v_out = camp_res.iloc[:,2].to_numpy()
@@ -189,16 +189,19 @@ err_anti.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 L_calculada = (params_4[2]*R_2_2)/(params_4[1]*params_4[0])
 C_calculada = 1/(L_calculada*params_4[1]**2)
-C_2_0 = 1/((2*np.pi*f_anti_fina[2116]**2)*L_calculada - (1/C_calculada))
+C_2_0 = 1/(((2*np.pi*f_anti_fina[2116])**2)*L_calculada - (1/C_calculada))
+w_res = params_4[1]
+w_anti = 2*np.pi*f_anti_fina[2116]
+capacitancia_2 = 1/((w_anti**2 - w_res**2)*L_calculada)
 
 def func_trans_anti(f_a, C_2):
     return R_2_2/(R_2_2 + (2*np.pi*f_a*L_calculada - 1/(2*np.pi*f_a*C_calculada))/(1 - 2*np.pi*f_a*C_2*(2*np.pi*f_a*L_calculada - 1/(2*np.pi*f_a*C_calculada))))
 
-params_5, cov_5 = curve_fit(func_trans_anti, f_anti_fina, Trans_anti_fina, [C_2_0], sigma=err_anti.iloc[:,2], absolute_sigma=True)
+params_5, cov_5 = curve_fit(func_trans_anti, f_anti_fina, Trans_anti_fina, [capacitancia_2], sigma=err_anti.iloc[:,2], absolute_sigma=True)
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(f_anti_fina, Trans_anti_fina, '.', label='T(f)')
-#plt.plot(f_anti_fina, func_trans_anti(f_anti_fina, params_5), label='Ajuste')
+plt.plot(f_anti_fina, func_trans_anti(f_anti_fina, params_5), label='Ajuste')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Transferencia')
 plt.grid(True)
@@ -223,6 +226,7 @@ plt.xlim(50095.75, 50098.25)
 plt.show()
 
 #%% Toda la señal
+'''
 datos_todos = pd.read_csv('piezo_lock_in_grueso.csv', header=None)
 datos_todos = datos_todos.transpose()
 datos_todos.columns = ['Frecuencia', 'V_out', 'Fase']
@@ -233,7 +237,7 @@ plt.yscale('log')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('V_out (V)')
 plt.grid(True)
-
+'''
 #%% Reloj
 datos_reloj_t_amb = pd.read_csv('reso piezo reloj', header=None)
 datos_reloj_t_amb = datos_reloj_t_amb.transpose()
