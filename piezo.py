@@ -140,7 +140,7 @@ plt.show()
 camp_res = pd.read_csv('Campana resonancia fina(1)', header=None)
 camp_res = camp_res.transpose()
 camp_res.columns = ['Frecuencia', 'V_out', 'Fase']
-err_res = pd.read_csv('Erores_resonancia_fina.csv', header=None)
+err_res = pd.read_csv('Errores_resonancia_fina.csv', header=None)
 err_res.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 f = camp_res.iloc[:,0].to_numpy()
 v_out = camp_res.iloc[:,2].to_numpy()
@@ -174,7 +174,7 @@ plt.legend()
 plt.show()
 
 #%% Lock-In Antiresonancia
-camp_anti = pd.read_csv('ANTI FINA', header=None)
+camp_anti = pd.read_csv('ANTI FINA', ' ', header = None)
 camp_anti = camp_anti.transpose()
 camp_anti.columns = ['Frecuencia', 'V_out', 'Fase']
 
@@ -182,8 +182,8 @@ f_anti_fina = camp_anti.iloc[:,0].to_numpy()
 v_out_anti_fina = camp_anti.iloc[:,1].to_numpy()
 phi_anti_fina = camp_anti.iloc[:,2].to_numpy()
 v_in_anti_fina = np.zeros(len(v_out_anti_fina))
-for i in range(len(v_out_anti_fina)):
-    v_in_anti_fina[i] = 1/np.sqrt(2)
+for i in range (len(v_out_anti_fina)):
+    v_in_anti_fina[i]= 1/(np.sqrt(2))
 Trans_anti_fina = v_out_anti_fina/v_in_anti_fina
 
 err_anti = pd.read_csv('Errores_antiresonancia.csv', header=None)
@@ -229,16 +229,17 @@ plt.show()
 
 #%% Toda la señal
 
-datos_todos = pd.read_csv('piezo_lock_in_grueso.csv', header=None)
+datos_todos = pd.read_csv('piezo_lock_in_grueso.csv', ' ', header=None)
 datos_todos = datos_todos.transpose()
 datos_todos.columns = ['Frecuencia', 'V_out', 'Fase']
 
 w_entera = datos_todos.iloc[:,0]*2*np.pi
 
 def func_entera(w, R, L, C):
-    return R_2/(R_2 + np.sqrt((R**2 + (w*L + 1/(w*C))**2)/(w**2*capacitancia_2**2*R**2 + (1 + w*capacitancia_2*(w*L - 1/(w*C)))**2)))
+    return R_2/(R_2 + np.sqrt(((R)**2+(w*L-1/(w*C))**2)/((w*capacitancia_2*R)**2+(1-w*capacitancia_2*(w*L-1/(w*C)))**2)))
 
 plt.plot(w_entera, func_entera(w_entera, 3332, L_calculada, C_calculada))
+plt.yscale('log')
 plt.show()
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
