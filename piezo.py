@@ -12,6 +12,7 @@ from matplotlib.pyplot import figure
 from scipy.optimize import curve_fit
 #from scipy import special
 plt.rcParams.update({'font.size': 15})
+
 #%% Osciloscopio
 data_res = pd.read_csv('Resonancia.csv')
 
@@ -41,6 +42,7 @@ t_res = v_out_res/v_in_res
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(f_res, t_res, '.')
 plt.grid(True)
+plt.yscale('log')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Transferencia')
 plt.show()
@@ -138,7 +140,7 @@ plt.show()
 camp_res = pd.read_csv('Campana resonancia fina(1)', header=None)
 camp_res = camp_res.transpose()
 camp_res.columns = ['Frecuencia', 'V_out', 'Fase']
-err_res = pd.read_csv('Errores_resonancia_fina.csv', header=None)
+err_res = pd.read_csv('Erores_resonancia_fina.csv', header=None)
 err_res.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 f = camp_res.iloc[:,0].to_numpy()
 v_out = camp_res.iloc[:,2].to_numpy()
@@ -163,8 +165,8 @@ print('Parametros: ', params_4)
 print('Estimaciones: ', T_0_2, w_s_0_2, Q_0_2)
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.errorbar(f, Trans, err_res.iloc[:,2], err_res.iloc[:,0], '.', ecolor='r', errorevery=500, label='T(f)')
-plt.plot(f, func_trans_res_v2(f, params_4[0], params_4[1], params_4[2]), 'g', label='Ajuste')
+plt.errorbar(f, Trans, err_res.iloc[:,2], err_res.iloc[:,0], '.', ecolor='r', errorevery=500, zorder=0, label='T(f)')
+plt.plot(f, func_trans_res_v2(f, params_4[0], params_4[1], params_4[2]), 'tab:orange', zorder=10, label='Ajuste')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Transferencia')
 plt.grid(True)
@@ -201,7 +203,7 @@ params_5, cov_5 = curve_fit(func_trans_anti, f_anti_fina, Trans_anti_fina, [capa
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(f_anti_fina, Trans_anti_fina, '.', label='T(f)')
-plt.plot(f_anti_fina, func_trans_anti(f_anti_fina, params_5), label='Ajuste')
+#plt.plot(f_anti_fina, func_trans_anti(f_anti_fina, params_5), label='Ajuste')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Transferencia')
 plt.grid(True)
@@ -226,10 +228,18 @@ plt.xlim(50095.75, 50098.25)
 plt.show()
 
 #%% Toda la señal
-'''
+
 datos_todos = pd.read_csv('piezo_lock_in_grueso.csv', header=None)
 datos_todos = datos_todos.transpose()
 datos_todos.columns = ['Frecuencia', 'V_out', 'Fase']
+
+w_entera = datos_todos.iloc[:,0]*2*np.pi
+
+def func_entera(w, R, L, C):
+    return R_2/(R_2 + np.sqrt((R**2 + (w*L + 1/(w*C))**2)/(w**2*capacitancia_2**2*R**2 + (1 + w*capacitancia_2*(w*L - 1/(w*C)))**2)))
+
+plt.plot(w_entera, func_entera(w_entera, 3332, L_calculada, C_calculada))
+plt.show()
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.plot(datos_todos.iloc[:,0], datos_todos.iloc[:,1], '.')
@@ -237,7 +247,7 @@ plt.yscale('log')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('V_out (V)')
 plt.grid(True)
-'''
+
 #%% Reloj
 datos_reloj_t_amb = pd.read_csv('reso piezo reloj', header=None)
 datos_reloj_t_amb = datos_reloj_t_amb.transpose()
@@ -418,13 +428,13 @@ plt.legend()
 plt.show()
 
 #%% Parametros
-R_2 = 30000
+R_dos = 30000
 
 w_m_1A_caliente = f_reloj_1A_caliente[47]*2*np.pi
 w_p_1A_caliente = f_reloj_1A_caliente[65]*2*np.pi
 T_1A_caliente = max(trans_reloj_1A_caliente)
 Q_1A_caliente = w_s_1A_caliente/(w_p_1A_caliente - w_m_1A_caliente)
-R_1A_caliente = (R_2/T_1A_caliente) - R_2
+R_1A_caliente = (R_dos/T_1A_caliente) - R_dos
 L_1A_caliente = (Q_1A_caliente*R_1A_caliente)/(w_s_1A_caliente*T_1A_caliente)
 C_1A_caliente = 1/(L_1A_caliente*w_s_1A_caliente**2)
 
@@ -432,7 +442,7 @@ w_m_medioA_caliente = f_reloj_medioA_caliente[48]*2*np.pi
 w_p_medioA_caliente = f_reloj_medioA_caliente[65]*2*np.pi
 T_medioA_caliente = max(trans_reloj_medioA_caliente)
 Q_medioA_caliente = w_s_medioA_caliente/(w_p_medioA_caliente - w_m_medioA_caliente)
-R_medioA_caliente = (R_2/T_medioA_caliente) - R_2
+R_medioA_caliente = (R_dos/T_medioA_caliente) - R_dos
 L_medioA_caliente = (Q_medioA_caliente*R_medioA_caliente)/(w_s_medioA_caliente*T_medioA_caliente)
 C_medioA_caliente = 1/(L_medioA_caliente*w_s_medioA_caliente**2)
 
@@ -440,7 +450,7 @@ w_m_t_amb = f_reloj_t_amb[44]*2*np.pi
 w_p_t_amb = f_reloj_t_amb[60]*2*np.pi
 T_t_amb = max(trans_reloj_t_amb)
 Q_t_amb = w_s_t_amb/(w_p_t_amb - w_m_t_amb)
-R_t_amb = (R_2/T_t_amb) - R_2
+R_t_amb = (R_dos/T_t_amb) - R_dos
 L_t_amb = (Q_t_amb*R_t_amb)/(w_s_t_amb*T_t_amb)
 C_t_amb = 1/(L_t_amb*w_s_t_amb**2)
 
@@ -448,7 +458,7 @@ w_m_medioA = f_reloj_medioA[48]*2*np.pi
 w_p_medioA = f_reloj_medioA[67]*2*np.pi
 T_medioA = max(trans_reloj_medioA)
 Q_medioA = w_s_medioA/(w_p_medioA - w_m_medioA)
-R_medioA = (R_2/T_medioA) - R_2
+R_medioA = (R_dos/T_medioA) - R_dos
 L_medioA = (Q_medioA*R_medioA)/(w_s_medioA*T_medioA)
 C_medioA = 1/(L_medioA*w_s_medioA**2)
 
@@ -456,7 +466,7 @@ w_m_1A = f_reloj_1A[46]*2*np.pi
 w_p_1A = f_reloj_1A[65]*2*np.pi
 T_1A = max(trans_reloj_1A)
 Q_1A = w_s_1A/(w_p_1A - w_m_1A)
-R_1A = (R_2/T_1A) - R_2
+R_1A = (R_dos/T_1A) - R_dos
 L_1A = (Q_1A*R_1A)/(w_s_1A*T_1A)
 C_1A = 1/(L_1A*w_s_1A**2)
 
@@ -464,7 +474,7 @@ w_m_2A = f_reloj_2A[47]*2*np.pi
 w_p_2A = f_reloj_2A[65]*2*np.pi
 T_2A = max(trans_reloj_2A)
 Q_2A = w_s_2A/(w_p_2A - w_m_2A)
-R_2A = (R_2/T_2A) - R_2
+R_2A = (R_dos/T_2A) - R_dos
 L_2A = (Q_2A*R_2A)/(w_s_2A*T_2A)
 C_2A = 1/(L_2A*w_s_2A**2)
 
@@ -472,7 +482,7 @@ w_m_3A = f_reloj_3A[51]*2*np.pi
 w_p_3A = f_reloj_3A[66]*2*np.pi
 T_3A = max(trans_reloj_3A)
 Q_3A = w_s_3A/(w_p_3A - w_m_3A)
-R_3A = (R_2/T_3A) - R_2
+R_3A = (R_dos/T_3A) - R_dos
 L_3A = (Q_3A*R_3A)/(w_s_3A*T_3A)
 C_3A = 1/(L_3A*w_s_3A**2)
 
@@ -554,10 +564,26 @@ for i in range(7):
     plt.ylabel('Transferencia')
     plt.grid(True)
     plt.show()
+    
+temperaturas = [60.46, 45.27, 30.12, 19.88, 15.39, 10.97, 7.09]    
+Qs = [Q_1A_caliente, Q_medioA_caliente, Q_t_amb, Q_medioA, Q_1A, Q_2A, Q_3A]
+resonancias = [w_s_1A_caliente, w_s_medioA_caliente, w_s_t_amb, w_s_medioA, w_s_1A, w_s_2A, w_s_3A]
 
-figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.errorbar(temperaturas, Ts, [0.003, 0.003, 0.003, 0.003, 0.003, 0.003, 0.003], None, '.')
-plt.xlabel('Temperatura (°C)')
-plt.ylabel('Amplitud')
-plt.grid(True)
+fig, ax1 = plt.subplots(figsize=(10,8))
+ax1.set_xlabel('Temperatura (°C)')
+ax1.set_ylabel('Frecuencia de resonancia (Hz)', color='tab:red')
+ax1.plot(temperaturas, resonancias, 'o', color='tab:red')
+ax1.tick_params(axis='y', labelcolor='tab:red')
+ax2 = ax1.twinx()
+ax2.set_ylabel('Q', color='tab:blue')
+ax2.plot(temperaturas, Qs, 'd', color='tab:blue')
+ax2.tick_params(axis='y', labelcolor='tab:blue')
+fig.tight_layout()
 plt.show()
+
+#figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+#plt.errorbar(temperaturas, Ts, [0.003, 0.003, 0.003, 0.003, 0.003, 0.003, 0.003], None, '.')
+#plt.xlabel('Temperatura (°C)')
+#plt.ylabel('Amplitud')
+#plt.grid(True)
+#plt.show()
