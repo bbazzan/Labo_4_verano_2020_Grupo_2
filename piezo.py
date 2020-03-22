@@ -189,28 +189,29 @@ Trans_anti_fina = v_out_anti_fina/v_in_anti_fina
 err_anti = pd.read_csv('Errores_antiresonancia(2).csv', header=None)
 err_anti.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
-L_calculada = (params_4[2]*R_2_2)/(params_4[1]*params_4[0])
+L_calculada = (params_4[2]*R_2)/(params_4[1]*params_4[0])
 C_calculada = 1/(L_calculada*params_4[1]**2)
 C_2_0 = 1/(((2*np.pi*f_anti_fina[2116])**2)*L_calculada - (1/C_calculada))
 w_res = params_4[1]
 w_anti = 2*np.pi*f_anti_fina[2116]
 capacitancia_2 = 1/((w_anti**2 - w_res**2)*L_calculada)
+R_calculada = R_2/params_4[0] - R_2
 
 #def func_trans_anti(f_a, C_2):
     #return R_2_2/(R_2_2 + (2*np.pi*f_a*L_calculada - 1/(2*np.pi*f_a*C_calculada))/(1 - 2*np.pi*f_a*C_2*(2*np.pi*f_a*L_calculada - 1/(2*np.pi*f_a*C_calculada))))
 
-def func_trans_anti(w, R, L, C):
-    return R_2/(R_2 + np.sqrt(((w*L-1/(w*C))**2)/((1-w*capacitancia_2*(w*L-1/(w*C)))**2)))
+def func_trans_anti(w, R, L, C, c_2):
+    return R_2/(R_2 + np.sqrt(((w*L-1/(w*C))**2)/((1-w*c_2*(w*L-1/(w*C)))**2)))
 
-#params_5, cov_5 = curve_fit(func_trans_anti, f_anti_fina, Trans_anti_fina, [capacitancia_2], sigma=err_anti.iloc[:,2], absolute_sigma=True)
+params_5, cov_5 = curve_fit(lambda w, c_2:func_trans_anti(w, R_calculada, L_calculada, C_calculada, c_2), f_anti_fina*2*np.pi, Trans_anti_fina, [capacitancia_2], sigma=err_anti.iloc[:,2], absolute_sigma=True)
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.errorbar(f_anti_fina, Trans_anti_fina, err_anti.iloc[:,2], err_anti.iloc[:,0], '.', ecolor='r', errorevery=250, label='T(f)')
-plt.plot(f_anti_fina, func_trans_anti(f_anti_fina*2*np.pi, 3332, L_calculada, C_calculada), 'tab:orange', label='Ajuste')
+plt.plot(f_anti_fina, func_trans_anti(f_anti_fina*2*np.pi, R_calculada, L_calculada, C_calculada, params_5), 'tab:orange', label='Ajuste')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Transferencia')
 plt.grid(True)
-#plt.yscale('log')
+plt.yscale('log')
 plt.legend()
 plt.show()
 
