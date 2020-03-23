@@ -140,7 +140,7 @@ plt.show()
 camp_res = pd.read_csv('Campana resonancia fina(1)', header=None)
 camp_res = camp_res.transpose()
 camp_res.columns = ['Frecuencia', 'V_out', 'Fase']
-err_res = pd.read_csv('Errores_resonancia_fina(2).csv', header=None)
+err_res = pd.read_csv('Errores_resonancia_fina(3).csv', header=None)
 err_res.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 f = camp_res.iloc[:,0].to_numpy()
 v_out = camp_res.iloc[:,2].to_numpy()
@@ -186,7 +186,7 @@ for i in range(len(v_out_anti_fina)):
     v_in_anti_fina[i] = 1/np.sqrt(2)
 Trans_anti_fina = v_out_anti_fina/v_in_anti_fina
 
-err_anti = pd.read_csv('Errores_antiresonancia(2).csv', header=None)
+err_anti = pd.read_csv('Errores_antiresonancia(3).csv', header=None)
 err_anti.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 L_calculada = (params_4[2]*R_2)/(params_4[1]*params_4[0])
@@ -261,7 +261,7 @@ datos_reloj_t_amb = pd.read_csv('reso piezo reloj', header=None)
 datos_reloj_t_amb = datos_reloj_t_amb.transpose()
 datos_reloj_t_amb.columns = ['Frecuencia', 'V_out', 'Fase']
 
-err_t_amb = pd.read_csv('Errores_relojTA(2).csv', header=None)
+err_t_amb = pd.read_csv('Errores_relojTA(3).csv', header=None)
 err_t_amb.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_t_amb = datos_reloj_t_amb.iloc[3:120,0]
@@ -276,7 +276,7 @@ datos_reloj_medioA = pd.read_csv('campana resonancia peltier 0,5A', header=None)
 datos_reloj_medioA = datos_reloj_medioA.transpose()
 datos_reloj_medioA.columns = ['Frecuencia', 'V_out', 'Fase']
 
-err_medioA = pd.read_csv('Errores_reloj_medio_frio(2).csv', header=None)
+err_medioA = pd.read_csv('Errores_reloj_medio_frio(3).csv', header=None)
 err_medioA.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_medioA = datos_reloj_medioA.iloc[3:120,0]
@@ -291,7 +291,7 @@ datos_reloj_1A = pd.read_csv('campana resonancia peltier 1A', header=None)
 datos_reloj_1A = datos_reloj_1A.transpose()
 datos_reloj_1A.columns = ['Frecuencia', 'V_out', 'Fase']
 
-err_1A = pd.read_csv('Errores_reloj_1_frio(2).csv', header=None)
+err_1A = pd.read_csv('Errores_reloj_1_frio(3).csv', header=None)
 err_1A.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_1A = datos_reloj_1A.iloc[3:120,0]
@@ -306,7 +306,7 @@ datos_reloj_2A = pd.read_csv('campana resonancia peltier 2A', header=None)
 datos_reloj_2A = datos_reloj_2A.transpose()
 datos_reloj_2A.columns = ['Frecuencia', 'V_out', 'Fase']
 
-err_2A = pd.read_csv('Errores_reloj_2_frio(2).csv', header=None)
+err_2A = pd.read_csv('Errores_reloj_2_frio(3).csv', header=None)
 err_2A.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_2A = datos_reloj_2A.iloc[3:120,0]
@@ -321,8 +321,8 @@ datos_reloj_3A = pd.read_csv('campana resonancia peltier 3A', header=None)
 datos_reloj_3A = datos_reloj_3A.transpose()
 datos_reloj_3A.columns = ['Frecuencia', 'V_out', 'Fase']
 
-err_3A = pd.read_csv('Errores_reloj_3_frio(2).csv', header=None)
-err_3A.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
+#err_3A = pd.read_csv('Errores_reloj_3_frio(3).csv', header=None)
+#err_3A.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_3A = datos_reloj_3A.iloc[3:120,0]
 v_out_reloj_3A = datos_reloj_3A.iloc[3:120,1]
@@ -336,7 +336,7 @@ datos_reloj_medioA_caliente = pd.read_csv('campana resonancia peltier caliente 0
 datos_reloj_medioA_caliente = datos_reloj_medioA_caliente.transpose()
 datos_reloj_medioA_caliente.columns = ['Frecuencia', 'V_out', 'Fase']
 
-err_medioA_caliente = pd.read_csv('Errores_reloj_medio_caliente(2).csv', header=None)
+err_medioA_caliente = pd.read_csv('Errores_reloj_medio_caliente(3).csv', header=None)
 err_medioA_caliente.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_medioA_caliente = datos_reloj_medioA_caliente.iloc[3:120,0]
@@ -351,7 +351,7 @@ datos_reloj_1A_caliente = pd.read_csv('campana resonancia peltier caliente 1A', 
 datos_reloj_1A_caliente = datos_reloj_1A_caliente.transpose()
 datos_reloj_1A_caliente.columns = ['Frecuencia', 'V_out', 'Fase']
 
-err_1A_caliente = pd.read_csv('Errores_reloj_1_caliente(2).csv', header=None)
+err_1A_caliente = pd.read_csv('Errores_reloj_1_caliente(3).csv', header=None)
 err_1A_caliente.columns = ['Error frecuencia', 'Error V_out', 'Error transferencia']
 
 f_reloj_1A_caliente = datos_reloj_1A_caliente.iloc[3:120,0]
@@ -376,13 +376,13 @@ trans_reloj_1A_caliente = v_out_reloj_1A_caliente/v_in_reloj_1A_caliente
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 #plt.plot(f_reloj_resistencia, trans_reloj_resistencia, '.', label='85,91°C')
-plt.errorbar(f_reloj_1A_caliente, trans_reloj_1A_caliente, err_1A_caliente.iloc[3:120,2], err_1A_caliente.iloc[3:120,0], label='60,46°C')
-plt.errorbar(f_reloj_medioA_caliente, trans_reloj_medioA_caliente, err_medioA_caliente.iloc[3:120,2], err_medioA_caliente.iloc[3:120,0], label='45,27°C')
-plt.errorbar(f_reloj_t_amb, trans_reloj_t_amb, err_t_amb.iloc[3:120,2], err_t_amb.iloc[3:120,0], label='30,12°C')
-plt.errorbar(f_reloj_medioA, trans_reloj_medioA, err_medioA.iloc[3:120,2], err_medioA.iloc[3:120,0], label='19,88°C')
-plt.errorbar(f_reloj_1A, trans_reloj_1A, err_1A.iloc[3:120,2], err_1A.iloc[3:120,0], label='15,39°C')
-plt.errorbar(f_reloj_2A, trans_reloj_2A, err_2A.iloc[3:120,2], err_2A.iloc[3:120,0], label='10,97°C')
-plt.errorbar(f_reloj_3A, trans_reloj_3A, err_3A.iloc[3:120,2], err_3A.iloc[3:120,0], label='7,09°C')
+plt.errorbar(f_reloj_1A_caliente, trans_reloj_1A_caliente, err_1A_caliente.iloc[3:120,2], err_1A_caliente.iloc[3:120,0], label='60,5°C')
+plt.errorbar(f_reloj_medioA_caliente, trans_reloj_medioA_caliente, err_medioA_caliente.iloc[3:120,2], err_medioA_caliente.iloc[3:120,0], label='45,3°C')
+plt.errorbar(f_reloj_t_amb, trans_reloj_t_amb, err_t_amb.iloc[3:120,2], err_t_amb.iloc[3:120,0], label='30,1°C')
+plt.errorbar(f_reloj_medioA, trans_reloj_medioA, err_medioA.iloc[3:120,2], err_medioA.iloc[3:120,0], label='19,9°C')
+plt.errorbar(f_reloj_1A, trans_reloj_1A, err_1A.iloc[3:120,2], err_1A.iloc[3:120,0], label='15,4°C')
+plt.errorbar(f_reloj_2A, trans_reloj_2A, err_2A.iloc[3:120,2], err_2A.iloc[3:120,0], label='11,0°C')
+#plt.errorbar(f_reloj_3A, trans_reloj_3A, err_3A.iloc[3:120,2], err_3A.iloc[3:120,0], label='7,09°C')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('Tranferencia')
 plt.grid(True)
@@ -425,7 +425,7 @@ w_s_2A = f_reloj_2A[index_2A]*2*np.pi
 w_s_3A = f_reloj_3A[index_3A]*2*np.pi
 
 resonancias = [w_s_1A_caliente, w_s_medioA_caliente, w_s_t_amb, w_s_medioA, w_s_1A, w_s_2A, w_s_3A]
-temperaturas = [60.46, 45.27, 30.12, 19.88, 15.39, 10.97, 7.09]
+temperaturas = [60.5, 45.3, 30.1, 19.9, 15.4, 11.0, 7.1]
 
 figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.errorbar(temperaturas, resonancias, [0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001], None, '.', label='w_s(T)')
@@ -551,17 +551,17 @@ for i in range(len(v_in_reloj_1A_caliente)):
     v_in_reloj_1A_caliente[i] = 0.5/np.sqrt(2)
 trans_reloj_1A_caliente = v_out_reloj_1A_caliente/v_in_reloj_1A_caliente
 
-frecuencias = [f_reloj_1A_caliente, f_reloj_medioA_caliente, f_reloj_t_amb, f_reloj_medioA, f_reloj_1A, f_reloj_2A, f_reloj_3A]
-transferencias = [trans_reloj_1A_caliente, trans_reloj_medioA_caliente, trans_reloj_t_amb, trans_reloj_medioA, trans_reloj_1A, trans_reloj_2A, trans_reloj_3A]
-Qs = [Q_1A_caliente, Q_medioA_caliente, Q_t_amb, Q_medioA, Q_1A, Q_2A, Q_3A]
-Ts = [T_1A_caliente, T_medioA_caliente, T_t_amb, T_medioA, T_1A, T_2A, T_3A]
-err_frecs = [err_1A_caliente.iloc[45:75,0], err_medioA_caliente.iloc[44:74,0], err_t_amb.iloc[40:70,0], err_medioA.iloc[45:75,0], err_1A.iloc[45:73,0], err_2A.iloc[45:75,0], err_3A.iloc[45:75,0]]
-err_trans = [err_1A_caliente.iloc[45:75,2], err_medioA_caliente.iloc[44:74,2], err_t_amb.iloc[40:70,2], err_medioA.iloc[45:75,2], err_1A.iloc[45:73,2], err_2A.iloc[45:75,2], err_3A.iloc[45:75,2]]
+frecuencias = [f_reloj_1A_caliente, f_reloj_medioA_caliente, f_reloj_t_amb, f_reloj_medioA, f_reloj_1A, f_reloj_2A]
+transferencias = [trans_reloj_1A_caliente, trans_reloj_medioA_caliente, trans_reloj_t_amb, trans_reloj_medioA, trans_reloj_1A, trans_reloj_2A]
+Qs = [Q_1A_caliente, Q_medioA_caliente, Q_t_amb, Q_medioA, Q_1A, Q_2A]
+Ts = [T_1A_caliente, T_medioA_caliente, T_t_amb, T_medioA, T_1A, T_2A]
+err_frecs = [err_1A_caliente.iloc[45:75,0], err_medioA_caliente.iloc[44:74,0], err_t_amb.iloc[40:70,0], err_medioA.iloc[45:75,0], err_1A.iloc[45:73,0], err_2A.iloc[45:75,0]]
+err_trans = [err_1A_caliente.iloc[45:75,2], err_medioA_caliente.iloc[44:74,2], err_t_amb.iloc[40:70,2], err_medioA.iloc[45:75,2], err_1A.iloc[45:73,2], err_2A.iloc[45:75,2]]
 params = []
 params = []
 cov = []
 
-for i in range(7):
+for i in range(6):
     params_i, cov_i = curve_fit(func_trans_res_v2, frecuencias[i], transferencias[i], [Ts[i], resonancias[i], Qs[i]])
     params.append(params_i)
     cov.append(cov_i)
@@ -573,9 +573,9 @@ for i in range(7):
     plt.grid(True)
     plt.show()
     
-temperaturas = [60.46, 45.27, 30.12, 19.88, 15.39, 10.97, 7.09]    
-Qs = [Q_1A_caliente, Q_medioA_caliente, Q_t_amb, Q_medioA, Q_1A, Q_2A, Q_3A]
-resonancias = [w_s_1A_caliente, w_s_medioA_caliente, w_s_t_amb, w_s_medioA, w_s_1A, w_s_2A, w_s_3A]
+temperaturas = [60.46, 45.27, 30.12, 19.88, 15.39, 10.97]    
+Qs = [Q_1A_caliente, Q_medioA_caliente, Q_t_amb, Q_medioA, Q_1A, Q_2A]
+resonancias = [w_s_1A_caliente, w_s_medioA_caliente, w_s_t_amb, w_s_medioA, w_s_1A, w_s_2A]
 
 err_Q_1A_caliente = np.sqrt((0.01/(w_p_1A_caliente - w_m_1A_caliente))**2 + 2*((0.01*w_s_1A_caliente)/(w_p_1A_caliente - w_m_1A_caliente))**2)
 err_Q_medioA_caliente =  np.sqrt((0.01/(w_p_medioA_caliente - w_m_medioA_caliente))**2 + 2*((0.01*w_s_medioA_caliente)/(w_p_medioA_caliente - w_m_medioA_caliente))**2)
@@ -583,14 +583,14 @@ err_Q_t_amb =  np.sqrt((0.01/(w_p_t_amb - w_m_t_amb))**2 + 2*((0.01*w_s_t_amb)/(
 err_Q_medioA =  np.sqrt((0.01/(w_p_medioA - w_m_medioA))**2 + 2*((0.01*w_s_medioA)/(w_p_medioA - w_m_medioA))**2)
 err_Q_1A =  np.sqrt((0.01/(w_p_1A - w_m_1A))**2 + 2*((0.01*w_s_1A)/(w_p_1A - w_m_1A))**2)
 err_Q_2A =  np.sqrt((0.01/(w_p_2A - w_m_2A))**2 + 2*((0.01*w_s_2A)/(w_p_2A - w_m_2A))**2)
-err_Q_3A =  np.sqrt((0.01/(w_p_3A - w_m_3A))**2 + 2*((0.01*w_s_3A)/(w_p_3A - w_m_3A))**2)
+#err_Q_3A =  np.sqrt((0.01/(w_p_3A - w_m_3A))**2 + 2*((0.01*w_s_3A)/(w_p_3A - w_m_3A))**2)
 
-errs_Qs = [err_Q_1A_caliente, err_Q_medioA_caliente, err_Q_t_amb, err_Q_medioA, err_Q_1A, err_Q_2A, err_Q_3A]
+errs_Qs = [err_Q_1A_caliente, err_Q_medioA_caliente, err_Q_t_amb, err_Q_medioA, err_Q_1A, err_Q_2A]
 
 fig, ax1 = plt.subplots(figsize=(10,8))
 ax1.set_xlabel('Temperatura (°C)')
 ax1.set_ylabel('Frecuencia de resonancia (Hz)', color='tab:red')
-ax1.errorbar(temperaturas, resonancias, [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], None, '.', color='tab:red')
+ax1.errorbar(temperaturas, resonancias, [0.01, 0.01, 0.01, 0.01, 0.01, 0.01], None, '.', color='tab:red')
 ax1.tick_params(axis='y', labelcolor='tab:red')
 ax1.grid(True)
 ax2 = ax1.twinx()
@@ -601,9 +601,31 @@ ax2.grid(True)
 fig.tight_layout()
 plt.show()
 
-#figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
-#plt.errorbar(temperaturas, Ts, [0.003, 0.003, 0.003, 0.003, 0.003, 0.003, 0.003], None, '.')
-#plt.xlabel('Temperatura (°C)')
-#plt.ylabel('Amplitud')
-#plt.grid(True)
-#plt.show()
+figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+plt.errorbar(temperaturas, Ts, [0.003, 0.003, 0.003, 0.003, 0.003, 0.003], None, '.')
+plt.xlabel('Temperatura (°C)')
+plt.ylabel('Transferencia máxima')
+plt.grid(True)
+plt.show()
+
+
+ws_ajustes = []
+q_ajustes = []
+
+for i in [0,1,2,3,4,5]:
+    ws_ajustes.append(params[i][1])
+    q_ajustes.append(params[i][2])
+
+fig, ax1 = plt.subplots(figsize=(10,8))
+ax1.set_xlabel('Temperatura (°C)')
+ax1.set_ylabel('Frecuencia de resonancia (Hz)', color='tab:red')
+ax1.errorbar(temperaturas, ws_ajustes, [0.002, 0.002, 0.002, 0.002, 0.002, 0.002], None, '.', color='tab:red')
+ax1.tick_params(axis='y', labelcolor='tab:red')
+ax1.grid(True)
+ax2 = ax1.twinx()
+ax2.set_ylabel('Q', color='tab:blue')
+ax2.errorbar(temperaturas, q_ajustes, [8, 8, 8, 8, 8, 8], None,'d', color='tab:blue')
+ax2.tick_params(axis='y', labelcolor='tab:blue')
+ax2.grid(True)
+fig.tight_layout()
+plt.show()
